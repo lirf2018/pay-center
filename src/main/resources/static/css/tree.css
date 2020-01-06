@@ -1,0 +1,105 @@
+@CHARSET "UTF-8";
+.aftree{
+	font-size:14px;
+}
+.aftree.domtree ul {
+    margin: 0;
+    padding: 0;
+}
+.aftree.domtree  ul {
+    margin: 0;
+    padding: 0 0 0 2em;
+}
+.aftree.domtree > ul li {
+    list-style: none;
+}
+.aftree.domtree > ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 0.3em;
+    
+}
+
+.aftree.domtree > ul li{line-height: 1.9;
+}
+.aftree.domtree > ul li:before {
+    position: absolute;
+    content: '';
+    top: -0.01em;
+    left: -1em;
+    width: 1em;
+    height: 1em;
+    border-style: none none solid solid;
+    border-color:#5cb85c;
+    border-width: 0.1em;
+    padding-left: 2px;
+}
+
+.aftree.domtree > ul li{
+    color: gray;
+}
+.aftree.domtree > ul li:not(:last-child):after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: -1em;
+    bottom: 0;
+    border-style: none none none solid;
+    border-color:#5cb85c;
+    border-width: 0.1em;
+}
+.aftree.domtree > ul li i{position: absolute;
+         width: 13px;
+         height: 14px;
+         left: -1.4em;
+         top: 0.4em;
+         z-index: 100;
+         border: 1px solid #5cb85c; 
+        line-height: 0.9;
+        background: #fff;
+        cursor: pointer;
+        padding: 0 1px;
+}
+.aftree.domtree > ul li i:before{
+	color: #5cb85c;
+}
+.aftree.domtree > ul li i.plus:before{
+  content: '+';	
+  left: -0.1em;
+  position: absolute;
+}
+.aftree.domtree > ul li i.plus{
+         padding: 0;
+}
+.aftree.domtree > ul li i.minus:before{
+  content: '-';	
+ /* padding-left: 0.15em;*/
+  line-height: 0.1em;
+  /*font-size: 1.2em;*/
+}
+.aftree.domtree > ul li div{height: 1.45em;
+   position: absolute;
+   right: 0;
+   top: 0;
+   width: 100%;
+   border: 1px;
+   border-style: none none dotted none;
+   border-color: #5cb85c;
+}
+.aftree.domtree > ul li div>*{
+ float: right;
+ padding-left: 3px;	
+}
+.aftree.domtree > ul li div a{
+	cursor: pointer;
+}
+.aftree.domtree > ul li div a:hover{
+	color: #eea236;
+}
+.aftree.domtree > ul li i.removeverticalline{
+	position: absolute;
+    width: 13px;
+    background-color: #fff;
+    top: -0.1em;
+    border: 0;
+}

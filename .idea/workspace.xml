@@ -26,11 +26,15 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/yufan/utils" />
     <property name="settings.editor.selected.configurable" value="project.scopes" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.yufan.utils" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\github\pay-center\src\main\java\com\yufan\utils" />
       <recent name="C:\git\pay-center\src\main\resources\static\img" />
       <recent name="C:\git\pay-center\src\main\resources\templates" />
       <recent name="C:\git\pay-center\lib" />
@@ -72,10 +76,22 @@
       <workItem from="1577928156473" duration="1816000" />
       <workItem from="1577958896545" duration="656000" />
       <workItem from="1578018504375" duration="6144000" />
+      <workItem from="1578303075004" duration="2266000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

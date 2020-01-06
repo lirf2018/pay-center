@@ -21,10 +21,10 @@ public class TestBeanAccount {
     private String secretKey;//秘钥
 
     @JSONField(name = "sys_name")
-    private String sysName;//秘钥
+    private String sysName;//系统名称
 
     @JSONField(name = "sys_code")
-    private String sysCode;//秘钥
+    private String sysCode;//系统编码
 
     public TestBeanAccount() {
         clientId = 1;

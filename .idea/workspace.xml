@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7ede4d9a-2da3-4399-b5ea-36517c51db68" name="Default Changelist" comment="" />
+    <list default="true" id="7ede4d9a-2da3-4399-b5ea-36517c51db68" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/TestController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/CommonMethod.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/Test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/alipay.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/failPage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/VerifySign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/VerifySign.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -19,26 +33,31 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1UYNYH9q0agXABKmsUaqN0rZIQK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/yufan/utils" />
-    <property name="settings.editor.selected.configurable" value="project.scopes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../store-back" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.yufan.utils" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\github\pay-center\src\main\resources\templates" />
+      <recent name="C:\github\pay-center\src\main\java\com\yufan\utils\pay\alipay" />
       <recent name="C:\github\pay-center\src\main\java\com\yufan\utils" />
       <recent name="C:\git\pay-center\src\main\resources\static\img" />
       <recent name="C:\git\pay-center\src\main\resources\templates" />
-      <recent name="C:\git\pay-center\lib" />
-      <recent name="C:\idea\pay-center\src\main\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -77,6 +96,8 @@
       <workItem from="1577958896545" duration="656000" />
       <workItem from="1578018504375" duration="6144000" />
       <workItem from="1578303075004" duration="2266000" />
+      <workItem from="1578358627609" duration="4266000" />
+      <workItem from="1578365333027" duration="16597000" />
     </task>
     <servers />
   </component>
@@ -88,7 +109,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

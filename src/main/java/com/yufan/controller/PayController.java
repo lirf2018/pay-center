@@ -4,7 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.yufan.bean.TestBeanAccount;
 import com.yufan.bean.TestBusinessBean;
 import com.yufan.utils.Base64Coder;
+import com.yufan.utils.CommonMethod;
 import com.yufan.utils.VerifySign;
+import com.yufan.utils.pay.alipay.AlipayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 
 /**
  * @author lirf
@@ -43,43 +47,121 @@ public class PayController {
      * 5.把求得的字符串和appsecret进行拼接然后求其md5值(其中的appsecret第三方不需要传,由接口方提供给第三方,接口方通过传过来的系统参数查询对应分配的appsecret)
      * sign=md5(packData(req)+appsecret)=md5("04-key1:0006-value1;04-key2:0006-value212345")=2b65a10ed4154187f82880cfd841c09f
      * <p>
+     * 签名参数 ：
+     * {
+     * "sysCode": "",
+     * "businessCode": "",
+     * "orderNo": "",
+     * "timestamp": ""
+     * }
+     * <p>
+     * 参数内容： paramData 如下
+     * {
+     * "sys_code": "",
+     * "business_code": "",
+     * "order_no": "",
+     * "pay_way": "",微信(weixin) 2 支付宝(alipay)
+     * "timestamp": ""，
+     * "sign":""
+     * }
+     * <p>
+     * paramDataBase64 = Base64(paramData);
+     * 请求方式：get
+     * 请求地址：
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/payEnter?base64Str=paramDataBase64
      */
     @RequestMapping("payEnter")
     public ModelAndView payEnter(HttpServletRequest request, HttpServletResponse response, String base64Str) {
         ModelAndView modelAndView = new ModelAndView();
         LOG.info("------------>base64Str:" + base64Str);
-
+        String orderNo = "";
+        String viewName = "failPage";
+        String msg = "";
+        String returnSuccessUrl = "";//支付成功跳转地址
+        String returnFailUrl = "";//支付失败时跳转地址
+        String exceptionalUrl = "";//支付异常或者超时跳转地址
+        String quitUrl = "";//用户付款中途退出返回商户网站的地址
         String param = Base64Coder.decodeString(base64Str);
+        LOG.info("------------>base64Str明文:" + param);
+        if (StringUtils.isEmpty(param)) {
+            msg = "缺少必要参数";
+            modelAndView.addObject("msg", msg);
+            modelAndView.setViewName(viewName);
+            return modelAndView;
+        }
         if (null != param) {
             JSONObject data = JSONObject.parseObject(param);
             String sysCode = data.getString("sys_code");//系统编码(用于查询系统秘钥)
             String businessCode = data.getString("business_code");//系统业务（sysCode和businessCode查询相关结果跳转）
-            String orderNo = data.getString("order_no");//订单号
+            orderNo = data.getString("order_no");//订单号
+            String payWay = data.getString("pay_way");//支付方式
             String timestamp = data.getString("timestamp");//请求时间、13位
             String sign = data.getString("sign");//签名
+            if (null == payWay || StringUtils.isEmpty(sysCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
+                    || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
+                LOG.info("-----支付失败,缺少必要参数---");
+                msg = "缺少必要参数";
+                modelAndView.addObject("msg", msg);
+                modelAndView.setViewName(viewName);
+                return modelAndView;
+            }
 
             //查询请求系统相关配置
             TestBeanAccount clientSys = new TestBeanAccount();
             TestBusinessBean clientSysBusiness = new TestBusinessBean();
             String secretKey = clientSys.getSecretKey();
-            String returnSuccessUrl = clientSysBusiness.getReturnSuccessUrl();
-            String returnFailUrl = clientSysBusiness.getReturnFailUrl();
-            String exceptionalUrl = clientSysBusiness.getExceptionalUrl();//异常或者超时跳转地址
+            returnSuccessUrl = clientSysBusiness.getReturnSuccessUrl();//支付成功跳转地址
+            returnFailUrl = clientSysBusiness.getReturnFailUrl();//支付失败时跳转地址
+            exceptionalUrl = clientSysBusiness.getExceptionalUrl();//支付异常或者超时跳转地址
+            quitUrl = clientSysBusiness.getQuitUrl();//用户付款中途退出返回商户网站的地址
 
             //
-            boolean checkSign = VerifySign.checkSign(data, secretKey)
+            JSONObject json = new JSONObject();
+            json.put("sys_code", sysCode);
+            json.put("business_code", businessCode);
+            json.put("order_no", orderNo);
+            json.put("timestamp", timestamp);
+            json.put("pay_way", payWay);
+            //校验秘钥
+//            boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
+//            if (!checkSign) {
+//                LOG.info("-----支付失败,签名验证失败---");
+//                msg = "签名验证失败";
+//                modelAndView.addObject("msg", msg);
+//                modelAndView.setViewName(viewName);
+//                return modelAndView;
+//            }
+            //创建支付订单(查询和生成订单相关信息)
+            String goodsName = "测试商品名称";
+            String partnerTradeNo = CommonMethod.randomStr("");
+            BigDecimal orderPrice = new BigDecimal("0.01");
+            LOG.info("---------goodsName:" + goodsName);
+            LOG.info("---------partnerTradeNo:" + partnerTradeNo);
+            LOG.info("---------orderPrice:" + orderPrice);
 
+            JSONObject paramData = new JSONObject();
+            paramData.put("goods_name", goodsName);//商品名称
+            paramData.put("partner_trade_no", partnerTradeNo);//商品支付流水号
+            paramData.put("order_price", orderPrice);//订单支付价格
+
+            //开始调用第三方支付平台
+            if ("alipay".equals(payWay)) {
+                LOG.info("-----调用支付宝支付接口-----");
+                viewName = "alipay";
+                modelAndView.setViewName(viewName);
+                //订单创建相关参数
+                paramData.put("quit_url", quitUrl);//用户付款中途退出返回商户网站的地址
+                JSONObject result = AlipayUtils.getInstance().toPayInf(paramData);//请求接口
+                LOG.info("--------" + result);
+                int code = result.getInteger("code");//第三方接口提交状态
+                modelAndView.addObject("code", code);
+            }
 
         }
 
-        modelAndView.addObject("returnSuccessUrl", returnSuccessUrl);
-        modelAndView.addObject("returnFailUrl", returnFailUrl);
-        modelAndView.addObject("exceptionalUrl", exceptionalUrl);
-
-        //支付成功后的跳转地址
-//        String paySuccessUrl = "http://127.0.0.1:8080/h5-web/recharge/orderDetail?orderNo=" + "DD";
-
-        modelAndView.setViewName("payResult");
+        modelAndView.addObject("returnSuccessUrl", returnSuccessUrl + "?orderNo=" + orderNo);
+        modelAndView.addObject("returnFailUrl", returnFailUrl + "?orderNo=" + orderNo);
+        modelAndView.addObject("exceptionalUrl", exceptionalUrl + "?orderNo=" + orderNo);
         return modelAndView;
     }
 

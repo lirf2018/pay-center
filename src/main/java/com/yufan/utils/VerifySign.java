@@ -1,12 +1,8 @@
 package com.yufan.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.yufan.common.bean.ReceiveJsonBean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 
 /**
  * @功能名称 Sign 检验
@@ -15,17 +11,24 @@ import java.util.Map;
  */
 public class VerifySign {
 
+    private static Logger LOG = Logger.getLogger(VerifySign.class);
+
     /**
      * 签名校验
+     *
+     * @param json      签名必要参数
+     * @param secretKey 客户端秘钥
+     * @param getSign   客户端签名
      * @return
      */
-    public static boolean checkSign(JSONObject json, String secretKey) {
+    public static boolean checkSign(JSONObject json, String secretKey, String getSign) {
+        LOG.info("---------json:" + json);
+        LOG.info("---------secretKey:" + secretKey);
+        LOG.info("---------getSign:" + getSign);
         //传过来的sign
         try {
-            String getSign = bean.getSign();
             MyMap map = new MyMap();
-            map.put("appsecret", appsecret);
-            map.put("timestamp", bean.getTimestamp());
+            map.put("secretKey", secretKey);
 
             for (Object k : json.keySet()) {
                 Object v = json.get(k);
@@ -43,34 +46,5 @@ public class VerifySign {
         }
 
         return false;
-    }
-
-    public static void main(String[] args) {
-        JSONObject obj = new JSONObject();
-        obj.put("name", "496");
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("b", "sad");
-        obj.put("listr", map);
-
-        List<Map<String, Object>> listmap = new ArrayList<>();
-        Map<String, Object> lmaps1 = new HashMap<String, Object>();
-        lmaps1.put("dd", "枯叶df");
-        Map<String, Object> lmaps2 = new HashMap<String, Object>();
-        lmaps2.put("dd", "枯叶df");
-        listmap.add(lmaps1);
-        listmap.add(lmaps2);
-
-        obj.put("lmaps", listmap);
-
-        List<String> listString = new ArrayList<>();
-        listString.add("工枯叶");
-        listString.add("工枯叶1");
-        obj.put("listString", listString);
-        System.out.println(obj);
-
-        ReceiveJsonBean bean = new ReceiveJsonBean();
-        bean.setData(obj);
-        checkSign(bean, "d");
-
     }
 }

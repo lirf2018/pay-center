@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
+<head>
+    <title>充值</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <base th:href="@{/}">
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <style>
+        .clear {
+            clear: both
+        }
+
+        .recharge-div > div {
+            float: left;
+            width: 50%;
+            height: 50px;
+        }
+
+        .recharge-div > div > span {
+            border: 1px solid #E0E0E0;
+            width: 100%;
+            display: block;
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .to-pay {
+            width: 100%;
+            font-size: 1.5rem;
+            border: 1px solid grey
+        }
+    </style>
+</head>
+<body>
+<div style="width: 100%;">
+    <input type="hidden" id="rechargeValue" value="0">
+<!--    <div style="width: 100%;font-size: 2.5rem;border: 1px solid grey" align="center">手机充值</div>-->
+    <div class="recharge-div" style="width: 100%;margin-top: 30px">
+        <div><span onclick="divOnChose(this)" data-value="10">10元</span></div>
+        <div><span onclick="divOnChose(this)" data-value="20">20元</span></div>
+        <div><span onclick="divOnChose(this)" data-value="30">30元</span></div>
+        <div><span onclick="divOnChose(this)" data-value="50">50元</span></div>
+        <div><span onclick="divOnChose(this)" data-value="100">100元</span></div>
+    </div>
+    <div class="clear"></div><!-- html注释：清除float产生浮动 -->
+    <div style="height: 50px"></div>
+    <div class="to-pay" align="center" data-type="wx">微信</div>
+    <div style="height: 30px"></div>
+    <div class="to-pay" align="center" data-type="alipay">支付宝</div>
+</div>
+<script>
+    function divOnChose(obj) {
+        $(".recharge-div>div>span").css("border", "1px solid #E0E0E0");
+        $(obj).css("border", "1px solid #000079");
+        $("#rechargeValue").val($(obj).attr("data-value"));
+    }
+
+    $(".to-pay").on("click", function () {
+        var payType = $(this).attr("data-type");
+        var rechargeValue = $("#rechargeValue").val();
+        alert("payType="+payType+" rechargeValue="+rechargeValue)
+    });
+</script>
+</body>
+</html>

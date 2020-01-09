@@ -18,13 +18,13 @@ public class VerifySign {
      *
      * @param json      签名必要参数
      * @param secretKey 客户端秘钥
-     * @param getSign   客户端签名
+     * @param clientSign   客户端签名
      * @return
      */
-    public static boolean checkSign(JSONObject json, String secretKey, String getSign) {
+    public static boolean checkSign(JSONObject json, String secretKey, String clientSign) {
         LOG.info("---------json:" + json);
         LOG.info("---------secretKey:" + secretKey);
-        LOG.info("---------getSign:" + getSign);
+        LOG.info("---------clientSign:" + clientSign);
         //传过来的sign
         try {
             MyMap map = new MyMap();
@@ -38,7 +38,7 @@ public class VerifySign {
 //                }
             }
             String sign = MD5.enCodeStandard(HelpCommon.getSign(map) + secretKey);
-            if (null != getSign && getSign.equals(sign)) {
+            if (null != clientSign && clientSign.equals(sign)) {
                 return true;
             }
         } catch (Exception e) {
@@ -46,5 +46,30 @@ public class VerifySign {
         }
 
         return false;
+    }
+
+
+    public static String getSign(JSONObject json, String secretKey) {
+        LOG.info("---------json:" + json);
+        LOG.info("---------secretKey:" + secretKey);
+        //传过来的sign
+        try {
+            MyMap map = new MyMap();
+            map.put("secretKey", secretKey);
+
+            for (Object k : json.keySet()) {
+                Object v = json.get(k);
+                //只取data第一层数据
+//                if (null != v && !(v instanceof JSONArray) && v.toString().indexOf("{") == -1 && v.toString().indexOf("[") == -1) {
+                map.put(k.toString(), v);
+//                }
+            }
+            String sign = MD5.enCodeStandard(HelpCommon.getSign(map) + secretKey);
+            return sign;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

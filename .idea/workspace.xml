@@ -2,18 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ede4d9a-2da3-4399-b5ea-36517c51db68" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/TestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/CommonMethod.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/Test.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/alipay.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/failPage.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payCenter.log" beforeDir="false" afterPath="$PROJECT_DIR$/payCenter.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/TestOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/VerifySign.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/VerifySign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/failPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/failPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayResultNotice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayResultNotice.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/TestController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/failPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/failPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/rechargePage.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/rechargePage.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +48,7 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../store-back" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../store-web" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
@@ -98,6 +102,8 @@
       <workItem from="1578303075004" duration="2266000" />
       <workItem from="1578358627609" duration="4266000" />
       <workItem from="1578365333027" duration="16597000" />
+      <workItem from="1578444382658" duration="3325000" />
+      <workItem from="1578555712789" duration="6085000" />
     </task>
     <servers />
   </component>

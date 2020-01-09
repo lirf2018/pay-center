@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <base th:href="@{/}">
-    <script src="js/jquery-1.9.1.min.js"></script>
     <style>
         .clear {
             clear: both
@@ -39,7 +38,7 @@
 <body>
 <div style="width: 100%;">
     <input type="hidden" id="rechargeValue" value="0">
-<!--    <div style="width: 100%;font-size: 2.5rem;border: 1px solid grey" align="center">手机充值</div>-->
+    <!--    <div style="width: 100%;font-size: 2.5rem;border: 1px solid grey" align="center">手机充值</div>-->
     <div class="recharge-div" style="width: 100%;margin-top: 30px">
         <div><span onclick="divOnChose(this)" data-value="10">10元</span></div>
         <div><span onclick="divOnChose(this)" data-value="20">20元</span></div>
@@ -49,11 +48,12 @@
     </div>
     <div class="clear"></div><!-- html注释：清除float产生浮动 -->
     <div style="height: 50px"></div>
-    <div class="to-pay" align="center" data-type="wx">微信</div>
+<!--    <div class="to-pay" align="center" data-type="wx">微信</div>-->
     <div style="height: 30px"></div>
-    <div class="to-pay" align="center" data-type="alipay" onclick="javascript:createOrder('alipay')">支付宝</div>
+    <div class="to-pay" align="center" data-type="alipay">支付宝</div>
 </div>
-<script>
+<script src="js/jquery.min.js"></script>
+<script th:inline="javascript">
     function divOnChose(obj) {
         $(".recharge-div>div>span").css("border", "1px solid #E0E0E0");
         $(obj).css("border", "1px solid #000079");
@@ -61,25 +61,25 @@
     }
 
     $(".to-pay").on("click", function () {
-        var payType = $(this).attr("data-type");
+        var payWay = $(this).attr("data-type");
         var rechargeValue = $("#rechargeValue").val();
-        alert("payType="+payType+" rechargeValue="+rechargeValue)
-    });
-    
-    function createOrder(payWay) {
+        var data=  {
+            "rechargeValue":rechargeValue,
+            "payWay":payWay
+        }
         $.ajax({
-            url: "activity/saveActivityData",
+            url: "test/createOrder",
             type: 'POST',
             data: data,// 要提交的表单 ,
             async: false,
             cache: false,
             dataType: "json",
             success: function (data) {
-                window.location.href = "";
+                window.location.href = "pay/payEnter?base64Str=" + data.values;
             }
         });
-    }
-    
+    });
+
 </script>
 </body>
 </html>

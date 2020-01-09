@@ -26,7 +26,6 @@ public class PayResultNotice {
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/notice/alipay
-     * http://127.0.0.1:8087/pay-center/notice/alipay
      * 微信支付结果通知
      */
     @RequestMapping("alipay")

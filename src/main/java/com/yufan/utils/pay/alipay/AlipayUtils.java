@@ -63,6 +63,8 @@ public class AlipayUtils {
                 String sellerId = response.getSellerId();//收款支付宝账号对应的支付宝唯一用户号。以2088开头的纯16位数字
                 out.put("tradeNo", tradeNo);
                 out.put("sellerId", sellerId);
+                String body = response.getBody();
+                out.put("body", body);
             } else {
                 LOG.info("------调用失败--------");
                 out.put("code", 2);

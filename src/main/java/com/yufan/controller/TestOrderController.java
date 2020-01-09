@@ -1,10 +1,8 @@
 package com.yufan.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yufan.utils.Base64Coder;
-import com.yufan.utils.CommonMethod;
-import com.yufan.utils.HelpCommon;
-import com.yufan.utils.MyMap;
+import com.yufan.bean.TestBeanAccount;
+import com.yufan.utils.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lirf
@@ -24,13 +20,13 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/test/")
-public class TestController {
+public class TestOrderController {
 
     public static String sysCode = "h5-web";
     public static String businessCode = "pay_order";
     public static String orderNo = "";
 
-    private Logger LOG = Logger.getLogger(TestController.class);
+    private Logger LOG = Logger.getLogger(TestOrderController.class);
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/test/recharge
@@ -52,7 +48,7 @@ public class TestController {
      * 创建订单
      */
     @RequestMapping("createOrder")
-    public void createOrder(HttpServletResponse response, HttpServletRequest request, Integer payWay) {
+    public void createOrder(HttpServletResponse response, HttpServletRequest request, String payWay) {
         PrintWriter writer;
         try {
             writer = response.getWriter();
@@ -67,18 +63,14 @@ public class TestController {
             paramData.put("pay_way", payWay);
             paramData.put("timestamp", timestamp);
 
-            MyMap p = new MyMap();
-            p.put("sys_code", sysCode);
-            p.put("business_code", businessCode);
-            p.put("order_no", orderNo);
-            p.put("pay_way", payWay);
-            p.put("timestamp", timestamp);
-
-            String sign = HelpCommon.getSign(p);
+            TestBeanAccount clientSys = new TestBeanAccount();
+            String sign = VerifySign.getSign(paramData,clientSys.getSecretKey());
             paramData.put("sign", sign);
             String base64Str = Base64Coder.encodeString(paramData.toJSONString());
             LOG.info("----请求支付参数-----" + paramData);
-            writer.print(base64Str);
+            JSONObject out = new JSONObject();
+            out.put("values",base64Str);
+            writer.print(out);
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();

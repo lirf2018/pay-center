@@ -36,7 +36,7 @@ public class AlipayUtils {
      *
      * @return
      */
-    public JSONObject toPayInf(JSONObject param) {
+    public JSONObject alipayInf(JSONObject param) {
         LOG.info("-----调用支付宝支付接口参数-----param:" + param);
         JSONObject out = new JSONObject();
         out.put("code", -1);//code: -1 异常; 1提交成功; 2提交失败
@@ -47,7 +47,7 @@ public class AlipayUtils {
             AlipayTradeWapPayRequest request = new AlipayTradeWapPayRequest();
             //请求内容
             JSONObject paramData = new JSONObject();
-            paramData.put("subject", param.getString("goodsName"));//商品的标题/交易标题/订单标题/订单关键字等。如：大乐透
+            paramData.put("subject", param.getString("goods_name"));//商品的标题/交易标题/订单标题/订单关键字等。如：大乐透
             paramData.put("out_trade_no", param.getString("partner_trade_no"));//商户网站唯一订单号. 如：70501111111S001111119
             paramData.put("total_amount", param.getString("order_price"));//订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]	如：9.00
             paramData.put("quit_url", param.getString("quit_url"));//用户付款中途退出返回商户网站的地址	如： http://www.taobao.com/product/113714.html
@@ -55,7 +55,13 @@ public class AlipayUtils {
 
             String bizContent = paramData.toJSONString();
             request.setBizContent(bizContent);
+//            request.setNotifyUrl(AlipayConfig.notify_url);        //异步回调地址（后台）
+            request.setReturnUrl(AlipayConfig.return_url);        //同步回调地址（APP）
+
+            LOG.info(JSONObject.toJSONString(request));
+
             AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
+            LOG.info("==" + JSONObject.toJSONString(response));
             if (response.isSuccess()) {
                 LOG.info("------调用成功--------response:" + JSONObject.toJSONString(response));
                 out.put("code", 1);

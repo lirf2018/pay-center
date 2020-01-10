@@ -1,6 +1,7 @@
 package com.yufan.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.yufan.bean.TestBeanAccount;
 import com.yufan.bean.TestBusinessBean;
 import com.yufan.utils.Base64Coder;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author lirf
@@ -75,7 +79,7 @@ public class PayController {
     public void payEnter(HttpServletRequest request, HttpServletResponse response, String base64Str) {
         LOG.info("------------>base64Str:" + base64Str);
         PrintWriter writer = null;
-        try{
+        try {
             writer = response.getWriter();
 
             String orderNo = "";
@@ -148,10 +152,10 @@ public class PayController {
                     viewName = "alipay";
                     //订单创建相关参数
                     paramData.put("quit_url", quitUrl);//用户付款中途退出返回商户网站的地址
-                    JSONObject result = AlipayUtils.getInstance().toPayInf(paramData);//请求接口
+                    JSONObject result = AlipayUtils.getInstance().alipayInf(paramData);//请求接口
                     LOG.info("--------" + result);
                     int code = result.getInteger("code");//第三方接口提交状态
-                    if(code == 1){
+                    if (code == 1) {
                         String body = result.getString("body");
                         response.setContentType("text/html;charset=" + AlipayConfig.charset);
                         writer.write(body);
@@ -161,103 +165,56 @@ public class PayController {
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-//    public ModelAndView payEnter(HttpServletRequest request, HttpServletResponse response, String base64Str) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        LOG.info("------------>base64Str:" + base64Str);
-//        String orderNo = "";
-//        String viewName = "failPage";
-//        String msg = "";
-//        String returnSuccessUrl = "";//支付成功跳转地址
-//        String returnFailUrl = "";//支付失败时跳转地址
-//        String exceptionalUrl = "";//支付异常或者超时跳转地址
-//        String quitUrl = "";//用户付款中途退出返回商户网站的地址
-//        String param = Base64Coder.decodeString(base64Str);
-//        LOG.info("------------>base64Str明文:" + param);
-//        if (StringUtils.isEmpty(param)) {
-//            msg = "缺少必要参数";
-//            modelAndView.addObject("msg", msg);
-//            modelAndView.setViewName(viewName);
-//            return modelAndView;
-//        }
-//        if (null != param) {
-//            JSONObject data = JSONObject.parseObject(param);
-//            String sysCode = data.getString("sys_code");//系统编码(用于查询系统秘钥)
-//            String businessCode = data.getString("business_code");//系统业务（sysCode和businessCode查询相关结果跳转）
-//            orderNo = data.getString("order_no");//订单号
-//            String payWay = data.getString("pay_way");//支付方式
-//            String timestamp = data.getString("timestamp");//请求时间、13位
-//            String sign = data.getString("sign");//签名
-//            if (null == payWay || StringUtils.isEmpty(sysCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
-//                    || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
-//                LOG.info("-----支付失败,缺少必要参数---");
-//                msg = "缺少必要参数";
-//                modelAndView.addObject("msg", msg);
-//                modelAndView.setViewName(viewName);
-//                return modelAndView;
-//            }
-//
-//            //查询请求系统相关配置
-//            TestBeanAccount clientSys = new TestBeanAccount();
-//            TestBusinessBean clientSysBusiness = new TestBusinessBean();
-//            String secretKey = clientSys.getSecretKey();
-//            returnSuccessUrl = clientSysBusiness.getReturnSuccessUrl();//支付成功跳转地址
-//            returnFailUrl = clientSysBusiness.getReturnFailUrl();//支付失败时跳转地址
-//            exceptionalUrl = clientSysBusiness.getExceptionalUrl();//支付异常或者超时跳转地址
-//            quitUrl = clientSysBusiness.getQuitUrl();//用户付款中途退出返回商户网站的地址
-//
-//            //
-//            JSONObject json = new JSONObject();
-//            json.put("sys_code", sysCode);
-//            json.put("business_code", businessCode);
-//            json.put("order_no", orderNo);
-//            json.put("timestamp", timestamp);
-//            json.put("pay_way", payWay);
-//            //校验秘钥
-////            boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
-////            if (!checkSign) {
-////                LOG.info("-----支付失败,签名验证失败---");
-////                msg = "签名验证失败";
-////                modelAndView.addObject("msg", msg);
-////                modelAndView.setViewName(viewName);
-////                return modelAndView;
-////            }
-//            //创建支付订单(查询和生成订单相关信息)
-//            String goodsName = "测试商品名称";
-//            String partnerTradeNo = CommonMethod.randomStr("");
-//            BigDecimal orderPrice = new BigDecimal("0.01");
-//            LOG.info("---------goodsName:" + goodsName);
-//            LOG.info("---------partnerTradeNo:" + partnerTradeNo);
-//            LOG.info("---------orderPrice:" + orderPrice);
-//
-//            JSONObject paramData = new JSONObject();
-//            paramData.put("goods_name", goodsName);//商品名称
-//            paramData.put("partner_trade_no", partnerTradeNo);//商品支付流水号
-//            paramData.put("order_price", orderPrice);//订单支付价格
-//
-//            //开始调用第三方支付平台
-//            if ("alipay".equals(payWay)) {
-//                LOG.info("-----调用支付宝支付接口-----");
-//                viewName = "alipay";
-//                modelAndView.setViewName(viewName);
-//                //订单创建相关参数
-//                paramData.put("quit_url", quitUrl);//用户付款中途退出返回商户网站的地址
-//                JSONObject result = AlipayUtils.getInstance().toPayInf(paramData);//请求接口
-//                LOG.info("--------" + result);
-//                int code = result.getInteger("code");//第三方接口提交状态
-//                modelAndView.addObject("code", code);
-//            }
-//
-//        }
-//
-//        modelAndView.addObject("returnSuccessUrl", returnSuccessUrl + "?orderNo=" + orderNo);
-//        modelAndView.addObject("returnFailUrl", returnFailUrl + "?orderNo=" + orderNo);
-//        modelAndView.addObject("exceptionalUrl", exceptionalUrl + "?orderNo=" + orderNo);
-//        return modelAndView;
-//    }
+
+    /**
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/alipayReturnPage
+     * 支付后同步通知页面地址(所有支付交由支付中心处理)
+     *
+     * @return
+     */
+    @RequestMapping("alipayReturnPage")
+    public ModelAndView alipayReturnPage(HttpServletRequest request, HttpServletResponse response) {
+        LOG.info("------支付同步通知页面地址---------");
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            //获取支付宝GET过来反馈信息
+            Map<String, String> params = new HashMap<String, String>();
+            Map requestParams = request.getParameterMap();
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                //乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+                valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+                params.put(name, valueStr);
+            }
+            //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
+            //商户订单号
+            String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            //支付宝交易号
+            String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
+            //计算得出通知验证结果
+            //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+            boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
+            modelAndView.addObject("orderNo", out_trade_no);
+            if (verify_result) {
+                modelAndView.setViewName("payResult");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return modelAndView;
+    }
 
 
     /**

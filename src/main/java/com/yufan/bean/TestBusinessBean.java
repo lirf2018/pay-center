@@ -22,24 +22,16 @@ public class TestBusinessBean {
     @JSONField(name = "business_code")
     private String businessCode;//业务编码
 
-    @JSONField(name = "return_success_url")
-    private String returnSuccessUrl;//支付成功完成后的跳转地址
-
-    @JSONField(name = "return_fail_url")
-    private String returnFailUrl;//支付失败完成后的跳转地址
-
-    @JSONField(name = "exceptional_url")
-    private String exceptionalUrl;//支付异常完成后的跳转地址
+    @JSONField(name = "quit_url")
+    private String quitUrl;//缺省：支付中途退出地址
 
     @JSONField(name = "quit_url")
-    private String quitUrl;//用户付款中途退出返回商户网站的地址
+    private String returnUrl;//缺省：支付最终结果跳转地址
 
     public TestBusinessBean() {
         clientId = 1;
         businessCode = "pay_order";
-        returnSuccessUrl = "http://127.0.0.1:8080/h5-web/pay/success";
-        returnFailUrl = "http://127.0.0.1:8080/h5-web/pay/fail";
-        exceptionalUrl = "http://127.0.0.1:8080/h5-web/pay/timeOut";
         quitUrl = "http://baidu.com";
+        returnUrl = "";
     }
 }

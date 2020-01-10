@@ -26,12 +26,19 @@ public class TestBeanAccount {
     @JSONField(name = "sys_code")
     private String sysCode;//系统编码
 
+    @JSONField(name = "quit_url")
+    private String quitUrl;//缺省：支付中途退出地址
+
+    @JSONField(name = "quit_url")
+    private String returnUrl;//缺省：支付最终结果跳转地址
+
     public TestBeanAccount() {
         clientId = 1;
         secretKey = "test";
         sysName = "商城系统";
         sysCode = "h5-web";
+        quitUrl = "http://baidu.com";
+        returnUrl = "";
     }
-
 
 }

@@ -2,10 +2,12 @@ package com.yufan.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.yufan.bean.OrderBean;
 import com.yufan.bean.TestBeanAccount;
 import com.yufan.bean.TestBusinessBean;
 import com.yufan.utils.Base64Coder;
 import com.yufan.utils.CommonMethod;
+import com.yufan.utils.Constant;
 import com.yufan.utils.VerifySign;
 import com.yufan.utils.pay.alipay.AlipayConfig;
 import com.yufan.utils.pay.alipay.AlipayUtils;
@@ -83,16 +85,11 @@ public class PayController {
             writer = response.getWriter();
 
             String orderNo = "";
-            String viewName = "failPage";
-            String msg = "";
-            String returnSuccessUrl = "";//支付成功跳转地址
-            String returnFailUrl = "";//支付失败时跳转地址
-            String exceptionalUrl = "";//支付异常或者超时跳转地址
-            String quitUrl = "";//用户付款中途退出返回商户网站的地址
+            String quitUrl = "";//支付中途退出地址
             String param = Base64Coder.decodeString(base64Str);
             LOG.info("------------>base64Str明文:" + param);
             if (StringUtils.isEmpty(param)) {
-                msg = "缺少必要参数";
+                LOG.info("----------->缺少必要参数");
                 return;
             }
             if (null != param) {
@@ -106,20 +103,17 @@ public class PayController {
                 if (null == payWay || StringUtils.isEmpty(sysCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
                         || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
                     LOG.info("-----支付失败,缺少必要参数---");
-                    msg = "缺少必要参数";
                     return;
                 }
-
-                //查询请求系统相关配置
+                /**
+                 * 查询数据库中得到请求相关配置信息sysCode和businessCode
+                 */
                 TestBeanAccount clientSys = new TestBeanAccount();
                 TestBusinessBean clientSysBusiness = new TestBusinessBean();
                 String secretKey = clientSys.getSecretKey();
-                returnSuccessUrl = clientSysBusiness.getReturnSuccessUrl();//支付成功跳转地址
-                returnFailUrl = clientSysBusiness.getReturnFailUrl();//支付失败时跳转地址
-                exceptionalUrl = clientSysBusiness.getExceptionalUrl();//支付异常或者超时跳转地址
-                quitUrl = clientSysBusiness.getQuitUrl();//用户付款中途退出返回商户网站的地址
+                quitUrl = clientSysBusiness.getQuitUrl();
 
-                //
+                //支付中心验证签名
                 JSONObject json = new JSONObject();
                 json.put("sys_code", sysCode);
                 json.put("business_code", businessCode);
@@ -130,17 +124,26 @@ public class PayController {
                 boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
                 if (!checkSign) {
                     LOG.info("-----支付失败,签名验证失败---");
-                    msg = "签名验证失败";
                     return;
                 }
-                //创建支付订单(查询和生成订单相关信息)
-                String goodsName = "测试商品名称";
-                String partnerTradeNo = CommonMethod.randomStr("");
-                BigDecimal orderPrice = new BigDecimal("0.01");
-                LOG.info("---------goodsName:" + goodsName);
-                LOG.info("---------partnerTradeNo:" + partnerTradeNo);
-                LOG.info("---------orderPrice:" + orderPrice);
 
+                /**
+                 * 查询订单信息
+                 */
+                OrderBean order = Constant.orderBean;
+                String goodsName = order.getGoodsName();
+                BigDecimal orderPrice = order.getOrderPrice();
+                //生成支付中心流水号（商品唯一订单号）
+                String partnerTradeNo = CommonMethod.randomStr("");
+                /**
+                 * 保存交易记录
+                 */
+
+                LOG.info("---------goodsName:" + goodsName);
+                LOG.info("---------orderPrice:" + orderPrice);
+                LOG.info("---------partnerTradeNo:" + partnerTradeNo);
+
+                //组装第三方支付接口必须参数
                 JSONObject paramData = new JSONObject();
                 paramData.put("goods_name", goodsName);//商品名称
                 paramData.put("partner_trade_no", partnerTradeNo);//商品支付流水号
@@ -149,7 +152,6 @@ public class PayController {
                 //开始调用第三方支付平台
                 if ("alipay".equals(payWay)) {
                     LOG.info("-----调用支付宝支付接口-----");
-                    viewName = "alipay";
                     //订单创建相关参数
                     paramData.put("quit_url", quitUrl);//用户付款中途退出返回商户网站的地址
                     JSONObject result = AlipayUtils.getInstance().alipayInf(paramData);//请求接口
@@ -206,11 +208,13 @@ public class PayController {
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
             modelAndView.addObject("orderNo", out_trade_no);
+            LOG.info("--------out_trade_no:" + out_trade_no);
             if (verify_result) {
                 modelAndView.setViewName("payResult");
             }
         } catch (Exception e) {
             e.printStackTrace();
+//            modelAndView.setViewName("failPage");
         }
 
         return modelAndView;
@@ -236,8 +240,9 @@ public class PayController {
 
     //-----------------------------测试--------------------------
 
-    private static int testResultValue = 0;//0失败  1成功
+    private static int testResultValue = 0;//0失败  1成功 2异常或者超时
 
+    //http://lirf-shop.51vip.biz:25139/pay-center/pay/setTestResult?value=1
     @RequestMapping("setTestResult")
     public void setTestResult(HttpServletRequest request, HttpServletResponse response, Integer value) {
         PrintWriter writer;

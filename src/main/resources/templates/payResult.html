@@ -11,15 +11,13 @@
     <script src="js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-<input type="hidden" th:value="${rechargeValue}" id="rechargeValue">
-<input type="hidden" th:value="${payType}" id="payType">
 <div style="width: 100%;" id="payLoad">
     <div align="center">支付中···</div>
     <div align="center"><img src="img/loading.gif" width="200px" height="200px"></div>
 </div>
 
-<div style="width: 100%;" id="paySuccess">
-    <div align="center">支付成功</div>
+<div style="width: 100%;" id="payResult">
+    <div align="center">支付结果,订单号:<span th:text=""></span></div>
     <div align="center">
         <a th:href="${orderNo}">订单详情</a>
     </div>

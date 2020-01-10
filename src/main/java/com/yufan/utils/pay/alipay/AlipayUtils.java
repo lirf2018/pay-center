@@ -57,11 +57,7 @@ public class AlipayUtils {
             request.setBizContent(bizContent);
 //            request.setNotifyUrl(AlipayConfig.notify_url);        //异步回调地址（后台）
             request.setReturnUrl(AlipayConfig.return_url);        //同步回调地址（APP）
-
-            LOG.info(JSONObject.toJSONString(request));
-
             AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
-            LOG.info("==" + JSONObject.toJSONString(response));
             if (response.isSuccess()) {
                 LOG.info("------调用成功--------response:" + JSONObject.toJSONString(response));
                 out.put("code", 1);

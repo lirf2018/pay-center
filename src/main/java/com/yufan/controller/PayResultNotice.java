@@ -30,7 +30,7 @@ public class PayResultNotice {
      */
     @RequestMapping("alipay")
     public void payResultNoticeAlipay(HttpServletRequest request, HttpServletResponse response) {
-        LOG.info("-----支付宝支付结果通知------：");
+        LOG.info("-----支付宝支付最终结果通知------：");
         String message = null;
         PrintWriter pw = null;
         try {
@@ -40,6 +40,7 @@ public class PayResultNotice {
             if (null == message || "".equals(message)) {
                 message = readStreamParameter(request.getInputStream());
             }
+            LOG.info("------------------------message:" + message);
         } catch (Exception e) {
             LOG.error("---", e);
         }
@@ -52,7 +53,7 @@ public class PayResultNotice {
      */
     @RequestMapping("weixin")
     public void payResultNoticeWX(HttpServletRequest request, HttpServletResponse response) {
-        LOG.info("-----微信支付结果通知------：");
+        LOG.info("-----微信支付最终结果通知------：");
         String message = null;
         PrintWriter pw = null;
         try {

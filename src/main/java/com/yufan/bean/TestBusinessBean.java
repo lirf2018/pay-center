@@ -32,6 +32,6 @@ public class TestBusinessBean {
         clientId = 1;
         businessCode = "pay_order";
         quitUrl = "http://baidu.com";
-        returnUrl = "";
+        returnUrl = "wwwwwwwwwwwww";
     }
 }

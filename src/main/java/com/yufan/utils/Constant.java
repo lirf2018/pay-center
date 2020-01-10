@@ -1,6 +1,7 @@
 package com.yufan.utils;
 
 import com.yufan.bean.OrderBean;
+import com.yufan.bean.TradeRecord;
 
 /**
  * @author lirf
@@ -11,5 +12,6 @@ import com.yufan.bean.OrderBean;
 public class Constant {
 
     public static OrderBean orderBean;
+    public static TradeRecord tradeRecord;
 
 }

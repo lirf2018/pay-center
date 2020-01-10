@@ -6,23 +6,93 @@
     <title>支付结果页面</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <base th:href="@{/}">
+    <style>
+        .payding {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            top: 2.2rem;
+            padding-left: 16px;
+        }
+
+        .msg {
+            padding: 2.0rem;
+        }
+
+        .alert-msg{
+            font-size: 10px;
+            text-align: center;
+            color: red;
+            padding: 1.5rem 0;
+        }
+    </style>
     <script src="js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-<div style="width: 100%;" id="payLoad">
-    <div align="center">支付中···</div>
+<div style="width: 100%;" id="payding">
+    <div align="center" class="payding">支付结果确认中
+        <span style="letter-spacing:8px" id="point">...</span>
+    </div>
     <div align="center"><img src="img/loading.gif" width="200px" height="200px"></div>
 </div>
 
-<div style="width: 100%;" id="payResult">
-    <div align="center">支付结果,订单号:<span th:text=""></span></div>
+<div style="width: 100%;display: none" id="payResult">
+    <div align="center" class="msg"></div>
     <div align="center">
-        <a th:href="${orderNo}">订单详情</a>
+        <a th:href="${returnUrl}">查看订单详情</a>
     </div>
+    <div align="center" class="alert-msg">如对订单有疑问，请联系客服核实</div>
 </div>
 <script>
+    /*var t = 0;
+    var inter = setInterval("payding()", 1000);
+    function payding() {
+        console.log(t)
+        if (t >= 4) {
+            $("#point").html("");
+            t = 0;
+        } else {
+            t++;
+            $("#point").append(".");
+        }
+    }*/
+    //查询最终支付结果
+    var t = 10;
+    var inter = setInterval("queryPayResult()", 2000);
+
+    function queryPayResult() {
+        if (t < 0) {
+            $(".msg").html("支付结果确认超时");
+            setCommon();
+            return;
+        }
+        t--;
+        $.ajax({
+            url: "pay/ajaxPayResult",
+            type: 'POST',
+            data: {},// 要提交的表单 ,
+            async: false,
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                console.log("---:" + data)
+                if (data == 1) {
+                    $(".msg").html("交易成功");
+                    setCommon();
+                } else if (data == 0) {
+                    $(".msg").html("交易失败");
+                    setCommon();
+                }
+            }
+        });
+    }
+    
+    function setCommon() {
+        clearInterval(inter);
+        $("#payding").hide();
+        $("#payResult").show();
+    }
 
 </script>
 </body>

@@ -55,7 +55,7 @@ public class AlipayUtils {
 
             String bizContent = paramData.toJSONString();
             request.setBizContent(bizContent);
-//            request.setNotifyUrl(AlipayConfig.notify_url);        //异步回调地址（后台）
+            request.setNotifyUrl(AlipayConfig.notify_url);        //异步回调地址（后台）
             request.setReturnUrl(AlipayConfig.return_url);        //同步回调地址（APP）
             AlipayTradeWapPayResponse response = alipayClient.pageExecute(request);
             if (response.isSuccess()) {

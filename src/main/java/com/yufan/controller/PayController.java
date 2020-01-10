@@ -5,6 +5,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.yufan.bean.OrderBean;
 import com.yufan.bean.TestBeanAccount;
 import com.yufan.bean.TestBusinessBean;
+import com.yufan.bean.TradeRecord;
 import com.yufan.utils.Base64Coder;
 import com.yufan.utils.CommonMethod;
 import com.yufan.utils.Constant;
@@ -86,6 +87,7 @@ public class PayController {
 
             String orderNo = "";
             String quitUrl = "";//支付中途退出地址
+            String returnUrl = "";//支付结果通知地址
             String param = Base64Coder.decodeString(base64Str);
             LOG.info("------------>base64Str明文:" + param);
             if (StringUtils.isEmpty(param)) {
@@ -112,6 +114,7 @@ public class PayController {
                 TestBusinessBean clientSysBusiness = new TestBusinessBean();
                 String secretKey = clientSys.getSecretKey();
                 quitUrl = clientSysBusiness.getQuitUrl();
+                returnUrl = clientSysBusiness.getReturnUrl();
 
                 //支付中心验证签名
                 JSONObject json = new JSONObject();
@@ -138,6 +141,11 @@ public class PayController {
                 /**
                  * 保存交易记录
                  */
+                TradeRecord tradeRecord = new TradeRecord();
+                tradeRecord.setPartnerTradeNo(partnerTradeNo);
+                tradeRecord.setReturnUrl(returnUrl + "?orderNo=" + orderNo);
+                Constant.tradeRecord = tradeRecord;
+
 
                 LOG.info("---------goodsName:" + goodsName);
                 LOG.info("---------orderPrice:" + orderPrice);
@@ -172,9 +180,10 @@ public class PayController {
         }
     }
 
+
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/pay/alipayReturnPage
-     * 支付后同步通知页面地址(所有支付交由支付中心处理)
+     * alipay支付后同步通知页面地址(所有支付交由支付中心处理)
      *
      * @return
      */
@@ -199,7 +208,7 @@ public class PayController {
                 params.put(name, valueStr);
             }
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
-            //商户订单号
+            //商户订单号(交易流水号)
             String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             //支付宝交易号
             String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
@@ -208,20 +217,32 @@ public class PayController {
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
             modelAndView.addObject("orderNo", out_trade_no);
+            LOG.info("--------trade_no:" + trade_no);
             LOG.info("--------out_trade_no:" + out_trade_no);
+            String returnUrl = "";
+            if (StringUtils.isNotEmpty(out_trade_no)) {
+                //根据交易流水号查询交易记录
+                TradeRecord tradeRecord = Constant.tradeRecord;
+                returnUrl = tradeRecord.getReturnUrl();
+            }
             if (verify_result) {
                 modelAndView.setViewName("payResult");
             }
+            modelAndView.addObject("returnUrl", returnUrl);
         } catch (Exception e) {
             e.printStackTrace();
-//            modelAndView.setViewName("failPage");
         }
 
         return modelAndView;
     }
 
+    //-----------------------------测试--------------------------
+
+    private static int testResultValue = 0;//0失败  1成功 2异常或者超时
+
 
     /**
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/ajaxPayResult
      * 获取支付结果
      */
     @RequestMapping("ajaxPayResult")
@@ -237,10 +258,6 @@ public class PayController {
         }
     }
 
-
-    //-----------------------------测试--------------------------
-
-    private static int testResultValue = 0;//0失败  1成功 2异常或者超时
 
     //http://lirf-shop.51vip.biz:25139/pay-center/pay/setTestResult?value=1
     @RequestMapping("setTestResult")
@@ -261,11 +278,24 @@ public class PayController {
         PrintWriter writer;
         try {
             writer = response.getWriter();
-            writer.print(testResultValue);
+            writer.print(1);
             writer.close();
         } catch (Exception e) {
             LOG.info("----->getTestResult异常");
         }
     }
 
+
+    @RequestMapping("testResult")
+    public ModelAndView testResult(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            modelAndView.setViewName("payResult");
+            modelAndView.addObject("returnUrl", "");
+        } catch (Exception e) {
+            LOG.info("----->ajaxPayResult异常");
+        }
+        return modelAndView;
+    }
 }
+

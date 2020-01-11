@@ -2,29 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ede4d9a-2da3-4399-b5ea-36517c51db68" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TradeRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/interruptDefault.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/payCenter.log" beforeDir="false" afterPath="$PROJECT_DIR$/payCenter.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/bean/TestBusinessBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/Test.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/505.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/alipay.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/failPage.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/payResult.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/payResult.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/bean/OrderBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/bean/OrderBean.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/bean/TestBeanAccount.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/bean/TestBeanAccount.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/bean/TestBusinessBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/bean/TestBusinessBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/payResultback.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayResultNotice.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/controller/PayResultNotice.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/controller/TestOrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/controller/TestOrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/utils/Constant.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/utils/Constant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/yufan/utils/pay/alipay/AlipayUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/Test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/alipay.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/failPage.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/payResult.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/payResult.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/rechargePage.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/rechargePage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/payResultback.html" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -40,14 +32,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/templates/payResult.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+            <state relative-caret-position="122">
+              <caret line="95" column="38" selection-start-line="95" selection-start-column="36" selection-end-line="95" selection-end-column="38" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
@@ -57,8 +49,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="566">
-              <caret line="258" column="5" selection-start-line="258" selection-start-column="5" selection-end-line="258" selection-end-column="5" />
+            <state relative-caret-position="375">
+              <caret line="246" column="37" selection-start-line="246" selection-start-column="21" selection-end-line="246" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/templates/interruptDefault.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="350">
+              <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -68,10 +69,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>支付</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>交易</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -85,8 +94,10 @@
         <option value="$PROJECT_DIR$/src/main/resources/templates/rechargePage.html" />
         <option value="$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayResultNotice.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/templates/505.html" />
         <option value="$PROJECT_DIR$/src/main/resources/templates/payResult.html" />
+        <option value="$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/templates/interruptDefault.html" />
       </list>
     </option>
   </component>
@@ -164,16 +175,6 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="yufan" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pay-center" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pay-center" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="yufan" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="alipay" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pay-center" type="b2602c69:ProjectViewProjectNode" />
@@ -284,18 +285,26 @@
       <workItem from="1578622499196" duration="12899000" />
       <workItem from="1578643019924" duration="6606000" />
       <workItem from="1578665541793" duration="170000" />
-      <workItem from="1578666508938" duration="8530000" />
+      <workItem from="1578666508938" duration="11997000" />
     </task>
+    <task id="LOCAL-00001" summary="代码更新">
+      <created>1578675250383</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1578675250384</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8700000" />
+    <option name="totallyTimeSpent" value="12167000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20415778" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20415778" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -307,12 +316,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.14316703" />
+      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.27874187" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Spring" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.14859003" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Java Enterprise" order="11" />
@@ -330,7 +339,7 @@
       <window_info anchor="right" id="Bean Validation" order="9" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20415778" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -342,12 +351,12 @@
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" />
       <window_info anchor="bottom" id="Run" order="3" />
-      <window_info active="true" anchor="bottom" id="Debug" order="4" visible="true" weight="0.4164859" />
+      <window_info active="true" anchor="bottom" id="Debug" order="4" visible="true" weight="0.27874187" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Spring" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.14859003" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Java Enterprise" order="12" />
@@ -400,6 +409,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="代码更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="代码更新" />
   </component>
   <component name="WindowStateProjectService">
     <state x="500" y="184" key="FileChooserDialogImpl" timestamp="1578650295875">
@@ -484,17 +497,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/rechargePage.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="79" column="11" lean-forward="true" selection-start-line="69" selection-start-column="8" selection-end-line="79" selection-end-column="11" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/yufan/utils/pay/alipay/AlipayConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
@@ -529,22 +531,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/failPage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="18" column="8" lean-forward="true" selection-end-line="22" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/alipay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/rechargePage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="589">
+          <caret line="79" column="11" lean-forward="true" selection-start-line="69" selection-start-column="8" selection-end-line="79" selection-end-column="11" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/505.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="30" column="6" lean-forward="true" selection-end-line="40" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/yufan/controller/PayController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="258" column="5" selection-start-line="258" selection-start-column="5" selection-end-line="258" selection-end-column="5" />
+        <state relative-caret-position="375">
+          <caret line="246" column="37" selection-start-line="246" selection-start-column="21" selection-end-line="246" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/templates/payResult.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+        <state relative-caret-position="122">
+          <caret line="95" column="38" selection-start-line="95" selection-start-column="36" selection-end-line="95" selection-end-column="38" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/interruptDefault.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
         </state>
       </provider>
     </entry>

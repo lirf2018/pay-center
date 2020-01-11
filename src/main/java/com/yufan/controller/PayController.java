@@ -223,7 +223,7 @@ public class PayController {
             if (StringUtils.isNotEmpty(out_trade_no)) {
                 //根据交易流水号查询交易记录
                 TradeRecord tradeRecord = Constant.tradeRecord;
-                returnUrl = tradeRecord.getReturnUrl();
+                returnUrl = tradeRecord == null ? "" : tradeRecord.getReturnUrl();
             }
             if (verify_result) {
                 modelAndView.setViewName("payResult");
@@ -236,9 +236,26 @@ public class PayController {
         return modelAndView;
     }
 
+
+    /**
+     *  http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault
+     *  中途退出缺省页面
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("interruptDefault")
+    public ModelAndView interruptDefault(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("interruptDefault");
+        return modelAndView;
+    }
+
+
+
     //-----------------------------测试--------------------------
 
-    private static int testResultValue = 0;//0失败  1成功 2异常或者超时
+    private static int testResultValue = 2;//0失败  1成功 2异常或者超时
 
 
     /**

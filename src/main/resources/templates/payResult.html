@@ -25,10 +25,12 @@
             position: relative;
             padding-left: 20px;
             top: 3.0rem;
+            color: grey;
         }
 
         .msg {
             padding: 2.0rem;
+            color: grey;
         }
 
         .alert-msg {
@@ -88,11 +90,12 @@
             cache: false,
             dataType: "json",
             success: function (data) {
-                console.log("---:" + data)
+                console.log("---:" + data);
+                //状态 0 等待操作 1成功 2 失败  3异常
                 if (data == 1) {
                     $(".msg").html("交易成功");
                     setCommon();
-                } else if (data == 0) {
+                } else if (data == 2) {
                     $(".msg").html("交易失败");
                     setCommon();
                 }

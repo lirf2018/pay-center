@@ -34,4 +34,7 @@ public class AlipayConfig {
     // 页面跳转同步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问 商户可以自定义同步跳转地址
     public static String return_url = "http://lirf-shop.51vip.biz:25139/pay-center/pay/alipayReturnPage";
 
+    //支付中途退出地址缺省情况下
+    public static String quitUrl = "http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptAlipay";
+
 }

@@ -2,18 +2,15 @@ package com.yufan.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.yufan.bean.OrderBean;
-import com.yufan.bean.TestBeanAccount;
-import com.yufan.bean.TestBusinessBean;
-import com.yufan.bean.TradeRecord;
-import com.yufan.utils.Base64Coder;
-import com.yufan.utils.CommonMethod;
-import com.yufan.utils.Constant;
-import com.yufan.utils.VerifySign;
+import com.yufan.dao.IOrderDao;
+import com.yufan.pojo.TbTradeRecord;
+import com.yufan.service.IPayCenterService;
+import com.yufan.utils.*;
 import com.yufan.utils.pay.alipay.AlipayConfig;
 import com.yufan.utils.pay.alipay.AlipayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,9 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * @author lirf
@@ -38,10 +34,14 @@ public class PayController {
 
     private Logger LOG = Logger.getLogger(PayController.class);
 
+    @Autowired
+    private IPayCenterService iPayCenterService;
+
+    @Autowired
+    private IOrderDao iOrderDao;
 
     /**
      * 支付入口
-     * http://127.0.0.1:8087/pay-center/pay/payEnter
      * 接口请求说明
      * appsecret
      * 下面是参数   sid(应用ID)   appkey(接口密钥)  timestamp(13位毫秒级long值) sign数字签名
@@ -57,18 +57,21 @@ public class PayController {
      * <p>
      * 签名参数 ：
      * {
-     * "sysCode": "",
-     * "businessCode": "",
-     * "orderNo": "",
+     * "client_code": "",
+     * "business_code": "",
+     * "order_no": "",
+     * "pay_way": "",1微信(weixin) 2 支付宝(alipay)
+     * "record_type": "",
      * "timestamp": ""
      * }
      * <p>
      * 参数内容： paramData 如下
      * {
-     * "sys_code": "",
+     * "client_code": "",
      * "business_code": "",
      * "order_no": "",
-     * "pay_way": "",微信(weixin) 2 支付宝(alipay)
+     * "pay_way": "",1微信(weixin) 2 支付宝(alipay)
+     * "record_type": ""，
      * "timestamp": ""，
      * "sign":""
      * }
@@ -85,68 +88,114 @@ public class PayController {
         try {
             writer = response.getWriter();
 
-            String orderNo = "";
-            String quitUrl = "";//支付中途退出地址
-            String returnUrl = "";//支付结果通知地址
             String param = Base64Coder.decodeString(base64Str);
             LOG.info("------------>base64Str明文:" + param);
             if (StringUtils.isEmpty(param)) {
                 LOG.info("----------->缺少必要参数");
+                response.sendRedirect(request.getContextPath() + "/pay/page505");
                 return;
             }
             if (null != param) {
                 JSONObject data = JSONObject.parseObject(param);
-                String sysCode = data.getString("sys_code");//系统编码(用于查询系统秘钥)
+                String clientCode = data.getString("client_code");//系统编码(用于查询系统秘钥)
                 String businessCode = data.getString("business_code");//系统业务（sysCode和businessCode查询相关结果跳转）
-                orderNo = data.getString("order_no");//订单号
-                String payWay = data.getString("pay_way");//支付方式
+                String orderNo = data.getString("order_no");//订单号
+                Integer payWay = data.getInteger("pay_way");//支付方式 1微信(weixin) 2 支付宝(alipay)
+                Integer recordType = data.getInteger("record_type");//事项 1 订单退押金 2 订单退款 3 提现 4 订单支付
                 String timestamp = data.getString("timestamp");//请求时间、13位
                 String sign = data.getString("sign");//签名
-                if (null == payWay || StringUtils.isEmpty(sysCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
-                        || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign)) {
+                if (null == payWay || StringUtils.isEmpty(clientCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
+                        || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign) || null == recordType) {
                     LOG.info("-----支付失败,缺少必要参数---");
+                    response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
                 /**
                  * 查询数据库中得到请求相关配置信息sysCode和businessCode
                  */
-                TestBeanAccount clientSys = new TestBeanAccount();
-                TestBusinessBean clientSysBusiness = new TestBusinessBean();
-                String secretKey = clientSys.getSecretKey();
-                quitUrl = clientSysBusiness.getQuitUrl();
-                returnUrl = clientSysBusiness.getReturnUrl();
+                JSONObject clientJson = CommonCacheMethod.getClientParam(clientCode, businessCode);
+                if (null == clientJson) {
+                    LOG.info("-----clientJson为空-----");
+                    response.sendRedirect(request.getContextPath() + "/pay/page505");
+                    return;
+                }
+                String secretKey = clientJson.getString("secretKey");
+                String quitUrl = clientJson.getString("quitUrl");//支付中途退出地址
+                String returnUrl = clientJson.getString("returnUrl");//支付结果通知地址
 
                 //支付中心验证签名
                 JSONObject json = new JSONObject();
-                json.put("sys_code", sysCode);
+                json.put("client_code", clientCode);
                 json.put("business_code", businessCode);
+                json.put("record_type", recordType);
                 json.put("order_no", orderNo);
                 json.put("timestamp", timestamp);
                 json.put("pay_way", payWay);
                 //校验秘钥
                 boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
                 if (!checkSign) {
-                    LOG.info("-----支付失败,签名验证失败---");
+                    LOG.info("-----支付失败,支付中心签名验证失败---");
+                    response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
 
                 /**
-                 * 查询订单信息
+                 * 查询支付订单信息
                  */
-                OrderBean order = Constant.orderBean;
-                String goodsName = order.getGoodsName();
-                BigDecimal orderPrice = order.getOrderPrice();
+                List<Map<String, Object>> orderList = iOrderDao.queryOrderListMap(orderNo);
+                if (null == orderList || orderList.size() == 0) {
+                    LOG.info("-------待付款订单不存在------");
+                    response.sendRedirect(request.getContextPath() + "/pay/page505");
+                    return;
+                }
+                String goodsName = "";//最长256
+                BigDecimal orderPrice = new BigDecimal(0);
+                for (int i = 0; i < orderList.size(); i++) {
+                    if (i == 0) {
+                        orderPrice = new BigDecimal(orderList.get(i).get("order_price").toString());
+                        if (orderPrice.compareTo(new BigDecimal(0)) <= 0) {
+                            LOG.info("-------订单orderPrice不能为0------orderPrice: " + orderPrice);
+                            response.sendRedirect(request.getContextPath() + "/pay/page505");
+                            return;
+                        }
+                    }
+                    if (i == orderList.size() - 1) {
+                        goodsName = goodsName + orderList.get(i).get("goods_name");
+                    } else {
+                        goodsName = goodsName + orderList.get(i).get("goods_name") + ";";
+                    }
+                }
+                if (goodsName.length() > 256) {
+                    goodsName = goodsName.substring(0, 255);
+                }
+
                 //生成支付中心流水号（商品唯一订单号）
                 String partnerTradeNo = CommonMethod.randomStr("");
                 /**
                  * 保存交易记录
                  */
-                TradeRecord tradeRecord = new TradeRecord();
+                String tradeNo = "";
+                TbTradeRecord tradeRecord = new TbTradeRecord();
+                tradeRecord.setOrderNo(orderNo);
+                tradeRecord.setTradeNo(tradeNo);
                 tradeRecord.setPartnerTradeNo(partnerTradeNo);
+                tradeRecord.setRecordType(recordType.byteValue());
+                tradeRecord.setStatus(Constant.TRADE_STATUS_0.byteValue());//状态 0 等待操作 1成功 2 失败  3异常
+                tradeRecord.setRemark("");
+                Timestamp time = new Timestamp(new Date().getTime());
+                tradeRecord.setCreateTime(time);
+                tradeRecord.setPrice(orderPrice);
+                tradeRecord.setPayWay(payWay.byteValue());
+                tradeRecord.setTradeAcount("");
+                tradeRecord.setSubmitTime(time);
                 tradeRecord.setReturnUrl(returnUrl + "?orderNo=" + orderNo);
-                Constant.tradeRecord = tradeRecord;
+                //保存交易记录
+                iPayCenterService.saveObj(tradeRecord);
+                CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
+                String passTime = DatetimeUtil.convertDateToStr(DatetimeUtil.addSeconds(new Date(), CacheConstant.addPassSeconds));
+                CacheConstant.payReusltRemoveMap.put(partnerTradeNo, passTime);//用于记录移除缓存标识
 
-
+                LOG.info("---------orderNo:" + orderNo);
                 LOG.info("---------goodsName:" + goodsName);
                 LOG.info("---------orderPrice:" + orderPrice);
                 LOG.info("---------partnerTradeNo:" + partnerTradeNo);
@@ -158,30 +207,60 @@ public class PayController {
                 paramData.put("order_price", orderPrice);//订单支付价格
 
                 //开始调用第三方支付平台
-                if ("alipay".equals(payWay)) {
+                if (payWay == 2) {
                     LOG.info("-----调用支付宝支付接口-----");
                     //订单创建相关参数
                     paramData.put("quit_url", quitUrl);//用户付款中途退出返回商户网站的地址
                     JSONObject result = AlipayUtils.getInstance().alipayInf(paramData);//请求接口
                     LOG.info("--------" + result);
                     int code = result.getInteger("code");//第三方接口提交状态
+                    int tradeStatus = Constant.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
+                    String sellerId = "";
+                    String remark = "";
                     if (code == 1) {
+                        //更新交易记录
+                        tradeStatus = Constant.TRADE_STATUS_0;
+                        sellerId = result.getString("sellerId") == null ? "" : result.getString("sellerId");
+                        tradeNo = result.getString("tradeNo") == null ? "" : result.getString("tradeNo");
+                        //缓存
+                        tradeRecord.setTradeAcount(sellerId);
+                        tradeRecord.setTradeNo(tradeNo);
+                        CacheConstant.payTradeRecordMap.put(partnerTradeNo, tradeRecord);//定时处理移除
+                        //
+                        iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
                         String body = result.getString("body");
                         response.setContentType("text/html;charset=" + AlipayConfig.charset);
                         writer.write(body);
                         writer.close();
+                        return;
+                    } else if (code == 2) {
+                        LOG.info("------支付失败-------");
+                        remark = result.getString("msg");
+                        tradeStatus = Constant.TRADE_STATUS_2;
+                        iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
+                    } else {
+                        tradeStatus = Constant.TRADE_STATUS_3;
                     }
-                    return;
+                    iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
+                } else {
+                    LOG.info("------未知支付方式-------");
                 }
-
             }
+            response.sendRedirect(request.getContextPath() + "/pay/page505");
+            return;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("--异常---", e);
+            try {
+                response.sendRedirect(request.getContextPath() + "/pay/page505");
+            } catch (Exception e1) {
+                LOG.error("--异常2---", e1);
+            }
+
         }
     }
 
-
     /**
+     * 支付宝
      * http://lirf-shop.51vip.biz:25139/pay-center/pay/alipayReturnPage
      * alipay支付后同步通知页面地址(所有支付交由支付中心处理)
      *
@@ -189,8 +268,9 @@ public class PayController {
      */
     @RequestMapping("alipayReturnPage")
     public ModelAndView alipayReturnPage(HttpServletRequest request, HttpServletResponse response) {
-        LOG.info("------支付同步通知页面地址---------");
+        LOG.info("------支付宝同步通知页面地址---------");
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("505");
         try {
             //获取支付宝GET过来反馈信息
             Map<String, String> params = new HashMap<String, String>();
@@ -209,37 +289,82 @@ public class PayController {
             }
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以下仅供参考)//
             //商户订单号(交易流水号)
-            String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             //支付宝交易号
-            String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            //收款支付宝账号对应的支付宝唯一用户号。 以2088开头的纯16位数字
+            String sellerId = new String(request.getParameter("seller_id").getBytes("ISO-8859-1"), "UTF-8");
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
             //计算得出通知验证结果
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
-            modelAndView.addObject("orderNo", out_trade_no);
-            LOG.info("--------trade_no:" + trade_no);
-            LOG.info("--------out_trade_no:" + out_trade_no);
+            LOG.info("--------alipayReturnPage:" + params);
             String returnUrl = "";
-            if (StringUtils.isNotEmpty(out_trade_no)) {
+            String orderNo = "";
+            if (StringUtils.isNotEmpty(outTradeNo)) {
                 //根据交易流水号查询交易记录
-                TradeRecord tradeRecord = Constant.tradeRecord;
+                TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByPartnerTradeNo(outTradeNo);
                 returnUrl = tradeRecord == null ? "" : tradeRecord.getReturnUrl();
+                orderNo = tradeRecord.getOrderNo() == null ? "" : tradeRecord.getOrderNo();
+                //更新交易记录
+                iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constant.TRADE_STATUS_0);
             }
             if (verify_result) {
                 modelAndView.setViewName("payResult");
+            } else {
+                LOG.info("--验证---verify_result---失败----");
             }
             modelAndView.addObject("returnUrl", returnUrl);
+            modelAndView.addObject("orderNo", orderNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return modelAndView;
+    }
 
+    /**
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptAlipay
+     *    中途退出(alipay)页面
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("interruptAlipay")
+    public ModelAndView interruptAlipay(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            //获取支付宝GET过来反馈信息
+            Map<String, String> params = new HashMap<String, String>();
+            Map requestParams = request.getParameterMap();
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                //乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+                valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+                params.put(name, valueStr);
+            }
+            LOG.info("------interruptDefault-------" + params);
+            //商户订单号(交易流水号)
+            String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        modelAndView.setViewName("interruptDefault");
         return modelAndView;
     }
 
 
+
     /**
-     *  http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault
-     *  中途退出缺省页面
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault
+     * 中途退出缺省页面
+     *
      * @param request
      * @param response
      * @return
@@ -247,72 +372,74 @@ public class PayController {
     @RequestMapping("interruptDefault")
     public ModelAndView interruptDefault(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
+        try {
+            //获取支付宝GET过来反馈信息
+            Map<String, String> params = new HashMap<String, String>();
+            Map requestParams = request.getParameterMap();
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                //乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+                valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+                params.put(name, valueStr);
+            }
+            LOG.info("------interruptDefault-------" + params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         modelAndView.setViewName("interruptDefault");
         return modelAndView;
     }
 
-
-
-    //-----------------------------测试--------------------------
-
-    private static int testResultValue = 2;//0失败  1成功 2异常或者超时
-
-
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/pay/ajaxPayResult
      * 获取支付结果
+     * result 状态 0 等待操作 1成功 2 失败  3异常
+     * partnerTradeNo 商户订单号
      */
     @RequestMapping("ajaxPayResult")
-    public void ajaxPayResult(HttpServletRequest request, HttpServletResponse response) {
+    public void ajaxPayResult(HttpServletRequest request, HttpServletResponse response, String partnerTradeNo) {
         PrintWriter writer;
         try {
             LOG.info("-------获取支付结果---------");
             writer = response.getWriter();
-            writer.print(testResultValue);
+            int result = Constant.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
+            if (StringUtils.isNotEmpty(partnerTradeNo)) {
+                result = CacheConstant.payReusltMap.get(partnerTradeNo) == null ? Constant.TRADE_STATUS_0 : CacheConstant.payReusltMap.get(partnerTradeNo);
+            }
+            writer.print(result);
             writer.close();
         } catch (Exception e) {
             LOG.info("----->ajaxPayResult异常");
         }
     }
 
-
-    //http://lirf-shop.51vip.biz:25139/pay-center/pay/setTestResult?value=1
-    @RequestMapping("setTestResult")
-    public void setTestResult(HttpServletRequest request, HttpServletResponse response, Integer value) {
-        PrintWriter writer;
-        try {
-            writer = response.getWriter();
-            testResultValue = value;
-            writer.print(testResultValue);
-            writer.close();
-        } catch (Exception e) {
-            LOG.info("----->setTestResult异常");
-        }
-    }
-
-    @RequestMapping("getTestResult")
-    public void getTestResult(HttpServletRequest request, HttpServletResponse response) {
-        PrintWriter writer;
-        try {
-            writer = response.getWriter();
-            writer.print(1);
-            writer.close();
-        } catch (Exception e) {
-            LOG.info("----->getTestResult异常");
-        }
-    }
-
-
-    @RequestMapping("testResult")
-    public ModelAndView testResult(HttpServletRequest request, HttpServletResponse response) {
+    /**
+     * 支付异常跳转页面
+     * http://lirf-shop.51vip.biz:25139/pay-center/pay/page505
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("page505")
+    public ModelAndView page505(HttpServletRequest request, HttpServletResponse response, String msg) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            modelAndView.setViewName("payResult");
-            modelAndView.addObject("returnUrl", "");
+            modelAndView.addObject("msg", msg == null ? "" : msg);
+            modelAndView.setViewName("505");
         } catch (Exception e) {
             LOG.info("----->ajaxPayResult异常");
         }
         return modelAndView;
     }
+
+
 }
 

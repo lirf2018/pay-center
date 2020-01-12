@@ -1,8 +1,13 @@
 package com.yufan.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
+import com.yufan.pojo.TbTradeRecord;
+import com.yufan.service.IPayCenterService;
+import com.yufan.utils.CacheConstant;
+import com.yufan.utils.Constant;
 import com.yufan.utils.pay.alipay.AlipayConfig;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,13 +27,16 @@ import java.util.Map;
  * @author lirf
  * @version 1.0
  * @date 2020/1/7 13:52
- * @describe 第三方平台支付结果通知
+ * @describe 第三方平台支付最终结果通知
  */
 @Controller
 @RequestMapping("/notice/")
 public class PayResultNotice {
 
     private Logger LOG = Logger.getLogger(PayResultNotice.class);
+
+    @Autowired
+    private IPayCenterService iPayCenterService;
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/notice/alipay
@@ -54,33 +63,41 @@ public class PayResultNotice {
                 //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
                 params.put(name, valueStr);
             }
-            String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            //商户订单号(支付流水号)
+            String outTradeNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             //支付宝交易号
-            String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+            String tradeNo = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
             //交易状态
-            String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
+            String tradeStatus = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
             //收款支付宝账号对应的支付宝唯一用户号。 以2088开头的纯16位数字
-            String seller_id = new String(request.getParameter("seller_id").getBytes("ISO-8859-1"), "UTF-8");
-            LOG.info("---params:"+params);
+            String sellerId = new String(request.getParameter("seller_id").getBytes("ISO-8859-1"), "UTF-8");
+            //本次交易支付的订单金额，单位为人民币（元）
+            String totalAmount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
+            LOG.info("---outTradeNo:" + outTradeNo);
+            LOG.info("---tradeNo:" + tradeNo);
+            LOG.info("---tradeStatus:" + tradeStatus);
+            LOG.info("---sellerId:" + sellerId);
+            LOG.info("---totalAmount:" + totalAmount);
+            LOG.info("---params:" + params);
             //计算得出通知验证结果
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
             if (verify_result) {//验证成功
-                if (trade_status.equals("TRADE_FINISHED")) {
+                if (tradeStatus.equals("TRADE_FINISHED")) {
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-
+                    doTradeRecord(Constant.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount);
                     //注意：
                     //如果签约的是可退款协议，退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                     //如果没有签约可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
-                } else if (trade_status.equals("TRADE_SUCCESS")) {
+                } else if (tradeStatus.equals("TRADE_SUCCESS")) {
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-
+                    doTradeRecord(Constant.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount);
                     //注意：
                     //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
                 }
@@ -117,6 +134,40 @@ public class PayResultNotice {
         }
 
     }
+
+    /**
+     * 处理交易订单最终结果
+     *
+     * @param payWay         支付方式 1微信2支付宝
+     * @param partnerTradeNo 商户流水号
+     * @param tradeNo        支付宝交易号
+     * @param sellerId       收款支付宝账号
+     * @param totalAmount    收款金额
+     */
+    void doTradeRecord(Integer payWay, String tradeNo, String partnerTradeNo, String sellerId, String totalAmount) {
+        try {
+            TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByTradeNo(tradeNo);
+            if (null == tradeRecord) {
+                LOG.info("------tradeRecord查询不存在-------");
+                return;
+            }
+            int tradeStatus = tradeRecord.getStatus();
+            if (tradeStatus != Constant.TRADE_STATUS_0) {
+                LOG.info("------tradeNo已处理-------" + tradeNo);
+                return;
+            }
+            if (Constant.PAY_WAY_2 == payWay) {
+                if (tradeRecord.getTradeAcount().equals(sellerId) && tradeRecord.getPrice().compareTo(new BigDecimal(totalAmount)) == 0) {
+                    LOG.info("---alipay--更新交易最终结果-----");
+                    iPayCenterService.finishTradeRecordStatus(tradeNo, "", Constant.TRADE_STATUS_1);//交易成功
+                    CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_1);
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("---doTradeRecord---处理异常-----");
+        }
+    }
+
 
     /**
      * 从流中读取数据

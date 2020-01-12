@@ -50,7 +50,6 @@
     <div align="center" class="payding">交易结果确认中<span style="letter-spacing:8px" id="point">...</span></div>
     <div align="center"><img src="img/loading.gif" width="200px" height="200px"></div>
 </div>
-
 <div style="width: 100%;display: none" id="payResult">
     <div align="center" class="msg"></div>
     <div align="center">
@@ -89,7 +88,7 @@
             url: "pay/ajaxPayResult",
             type: 'POST',
             data: {
-                "partnerTradeNo":partnerTradeNo
+                "partnerTradeNo": partnerTradeNo
             },// 要提交的表单 ,
             async: false,
             cache: false,

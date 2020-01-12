@@ -167,7 +167,6 @@ public class PayResultNotice {
         }
     }
 
-
     /**
      * 从流中读取数据
      *

@@ -58,7 +58,7 @@
     </div>
     <div align="center" class="alert-msg">如对订单有疑问，请联系客服核实</div>
 </div>
-<script>
+<script th:inline="javascript">
     /*var t = 0;
     var inter = setInterval("payding()", 1000);
     function payding() {
@@ -71,6 +71,9 @@
             $("#point").append(".");
         }
     }*/
+
+    var partnerTradeNo = [[${partnerTradeNo}]];//商户订单号/支付流水号
+
     //查询最终交易结果
     var t = 9;
     var inter = setInterval("queryPayResult()", 2000);
@@ -85,7 +88,9 @@
         $.ajax({
             url: "pay/ajaxPayResult",
             type: 'POST',
-            data: {},// 要提交的表单 ,
+            data: {
+                "partnerTradeNo":partnerTradeNo
+            },// 要提交的表单 ,
             async: false,
             cache: false,
             dataType: "json",

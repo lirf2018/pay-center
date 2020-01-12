@@ -43,7 +43,12 @@ public class PayCenterServiceImpl implements IPayCenterService {
     }
 
     @Override
-    public int finishTradeRecordStatus(String tradeNo, String remark, int tradeStatus) {
-        return iPayCenterDao.finishTradeRecordStatus(tradeNo, remark, tradeStatus);
+    public int finishTradeRecordStatus(String tradeNo,  int tradeStatus) {
+        return iPayCenterDao.finishTradeRecordStatus(tradeNo,  tradeStatus);
+    }
+
+    @Override
+    public int finishTradeRecordStatus(String partnerTradeNo, String tradeNo, String sellerId,  int tradeStatus) {
+        return iPayCenterDao.finishTradeRecordStatus(partnerTradeNo, tradeNo, sellerId, tradeStatus);
     }
 }

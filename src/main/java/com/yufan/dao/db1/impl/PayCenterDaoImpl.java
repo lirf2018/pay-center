@@ -54,11 +54,14 @@ public class PayCenterDaoImpl implements IPayCenterDao {
     }
 
     @Override
-    public int finishTradeRecordStatus(String tradeNo, String remark, int tradeStatus) {
-        if (remark.length() > 200) {
-            remark = remark.substring(0, 150);
-        }
-        String sql = " update tb_trade_record set finish_time=NOW(),update_time=NOW(),status=?,remark=? where trade_no=? ";
-        return iGeneralDao.executeUpdateForSQL(sql, tradeStatus, remark, tradeNo);
+    public int finishTradeRecordStatus(String tradeNo, int tradeStatus) {
+        String sql = " update tb_trade_record set finish_time=NOW(),update_time=NOW(),status=? where trade_no=? ";
+        return iGeneralDao.executeUpdateForSQL(sql, tradeStatus, tradeNo);
+    }
+
+    @Override
+    public int finishTradeRecordStatus(String partnerTradeNo, String tradeNo, String sellerId, int tradeStatus) {
+        String sql = " update tb_trade_record set trade_no=?, status=?,update_time=NOW(),trade_acount=? ,finish_time=NOW() where partner_trade_no=? ";
+        return iGeneralDao.executeUpdateForSQL(sql, tradeNo, tradeStatus, sellerId, partnerTradeNo);
     }
 }

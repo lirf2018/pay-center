@@ -30,6 +30,7 @@ public class CacheConstant {
      */
     public static Map<String, String> payReusltRemoveMap = new HashMap<>();
     public static Integer addPassSeconds = 50;//增加过期时间/s
+    public static Integer addPassDay = 3;//增加过期时间/d
 
     /**
      * 保存支付最终结果 key = partnerTradeNo商户订单号(支付流水号) value = status

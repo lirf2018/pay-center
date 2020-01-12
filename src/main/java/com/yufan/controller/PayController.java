@@ -83,15 +83,15 @@ public class PayController {
      */
     @RequestMapping("payEnter")
     public void payEnter(HttpServletRequest request, HttpServletResponse response, String base64Str) {
-        LOG.info("------------>base64Str:" + base64Str);
+        LOG.info("----payEnter-------->base64Str:" + base64Str);
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
 
             String param = Base64Coder.decodeString(base64Str);
-            LOG.info("------------>base64Str明文:" + param);
+            LOG.info("---payEnter--------->base64Str明文:" + param);
             if (StringUtils.isEmpty(param)) {
-                LOG.info("----------->缺少必要参数");
+                LOG.info("----payEnter------->缺少必要参数");
                 response.sendRedirect(request.getContextPath() + "/pay/page505");
                 return;
             }
@@ -106,7 +106,7 @@ public class PayController {
                 String sign = data.getString("sign");//签名
                 if (null == payWay || StringUtils.isEmpty(clientCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
                         || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign) || null == recordType) {
-                    LOG.info("-----支付失败,缺少必要参数---");
+                    LOG.info("--payEnter---支付失败,缺少必要参数---");
                     response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
@@ -115,7 +115,7 @@ public class PayController {
                  */
                 JSONObject clientJson = CommonCacheMethod.getClientParam(clientCode, businessCode);
                 if (null == clientJson) {
-                    LOG.info("-----clientJson为空-----");
+                    LOG.info("--payEnter---clientJson为空-----");
                     response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
@@ -134,7 +134,7 @@ public class PayController {
                 //校验秘钥
                 boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
                 if (!checkSign) {
-                    LOG.info("-----支付失败,支付中心签名验证失败---");
+                    LOG.info("--payEnter---支付失败,支付中心签名验证失败---");
                     response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
@@ -144,7 +144,7 @@ public class PayController {
                  */
                 List<Map<String, Object>> orderList = iOrderDao.queryOrderListMap(orderNo);
                 if (null == orderList || orderList.size() == 0) {
-                    LOG.info("-------待付款订单不存在------");
+                    LOG.info("---payEnter----待付款订单不存在------");
                     response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
@@ -154,7 +154,7 @@ public class PayController {
                     if (i == 0) {
                         orderPrice = new BigDecimal(orderList.get(i).get("order_price").toString());
                         if (orderPrice.compareTo(new BigDecimal(0)) <= 0) {
-                            LOG.info("-------订单orderPrice不能为0------orderPrice: " + orderPrice);
+                            LOG.info("---payEnter----订单orderPrice不能为0------orderPrice: " + orderPrice);
                             response.sendRedirect(request.getContextPath() + "/pay/page505");
                             return;
                         }
@@ -192,13 +192,13 @@ public class PayController {
                 //保存交易记录
                 iPayCenterService.saveObj(tradeRecord);
                 CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
-                String passTime = DatetimeUtil.convertDateToStr(DatetimeUtil.addSeconds(new Date(), CacheConstant.addPassSeconds));
+                String passTime = DatetimeUtil.convertDateToStr(DatetimeUtil.addDays(new Date(), CacheConstant.addPassDay));
                 CacheConstant.payReusltRemoveMap.put(partnerTradeNo, passTime);//用于记录移除缓存标识
 
-                LOG.info("---------orderNo:" + orderNo);
-                LOG.info("---------goodsName:" + goodsName);
-                LOG.info("---------orderPrice:" + orderPrice);
-                LOG.info("---------partnerTradeNo:" + partnerTradeNo);
+                LOG.info("---payEnter------orderNo:" + orderNo);
+                LOG.info("--payEnter-------goodsName:" + goodsName);
+                LOG.info("---payEnter------orderPrice:" + orderPrice);
+                LOG.info("----payEnter-----partnerTradeNo:" + partnerTradeNo);
 
                 //组装第三方支付接口必须参数
                 JSONObject paramData = new JSONObject();
@@ -234,7 +234,7 @@ public class PayController {
                         writer.close();
                         return;
                     } else if (code == 2) {
-                        LOG.info("------支付失败-------");
+                        LOG.info("---payEnter---支付失败-------");
                         remark = result.getString("msg");
                         tradeStatus = Constant.TRADE_STATUS_2;
                         iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
@@ -298,7 +298,7 @@ public class PayController {
             //计算得出通知验证结果
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
-            LOG.info("--------alipayReturnPage:" + params);
+            LOG.info("-----alipayReturnPage:" + params);
             String returnUrl = "";
             String orderNo = "";
             if (StringUtils.isNotEmpty(outTradeNo)) {
@@ -307,7 +307,10 @@ public class PayController {
                 returnUrl = tradeRecord == null ? "" : tradeRecord.getReturnUrl();
                 orderNo = tradeRecord.getOrderNo() == null ? "" : tradeRecord.getOrderNo();
                 //更新交易记录
-                iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constant.TRADE_STATUS_0);
+                if (0 == CacheConstant.payReusltMap.get(outTradeNo)) {
+                    LOG.info("----alipayReturnPage--同步响应更新--");
+                    iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constant.TRADE_STATUS_0);
+                }
             }
             if (verify_result) {
                 modelAndView.setViewName("payResult");
@@ -316,6 +319,7 @@ public class PayController {
             }
             modelAndView.addObject("returnUrl", returnUrl);
             modelAndView.addObject("orderNo", orderNo);
+            modelAndView.addObject("partnerTradeNo", outTradeNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -324,7 +328,8 @@ public class PayController {
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptAlipay
-     *    中途退出(alipay)页面
+     * 中途退出(alipay)页面
+     *
      * @param request
      * @param response
      * @return
@@ -358,7 +363,6 @@ public class PayController {
         modelAndView.setViewName("interruptDefault");
         return modelAndView;
     }
-
 
 
     /**
@@ -407,7 +411,7 @@ public class PayController {
     public void ajaxPayResult(HttpServletRequest request, HttpServletResponse response, String partnerTradeNo) {
         PrintWriter writer;
         try {
-            LOG.info("-------获取支付结果---------");
+            LOG.info("-------获取支付结果---------partnerTradeNo:" + partnerTradeNo);
             writer = response.getWriter();
             int result = Constant.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
             if (StringUtils.isNotEmpty(partnerTradeNo)) {
@@ -439,7 +443,6 @@ public class PayController {
         }
         return modelAndView;
     }
-
 
 }
 

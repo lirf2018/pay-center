@@ -60,10 +60,21 @@ public interface IPayCenterDao {
      * 更新交易记录
      *
      * @param tradeNo     第三方平台返回的交易单号（如微信返回的）
-     * @param remark      失败备注
      * @param tradeStatus 交易状态 0 等待操作 1成功 2 失败  3异常
      * @return
      */
-    public int finishTradeRecordStatus(String tradeNo, String remark, int tradeStatus);
+    public int finishTradeRecordStatus(String tradeNo, int tradeStatus);
+
+
+    /**
+     * 交易完成(第三方平台同步响应结果)
+     *
+     * @param partnerTradeNo 商户号
+     * @param tradeNo        第三方平台返回的交易单号（如微信返回的）
+     * @param sellerId       收款支付宝账号对应的支付宝唯一用户号。以2088开头的纯16位数字
+     * @param tradeStatus    交易状态 0 等待操作 1成功 2 失败  3异常
+     * @return
+     */
+    public int finishTradeRecordStatus(String partnerTradeNo, String tradeNo, String sellerId,  int tradeStatus);
 
 }

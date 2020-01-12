@@ -6,6 +6,7 @@ import com.yufan.service.IPayCenterService;
 import com.yufan.utils.CacheConstant;
 import com.yufan.utils.Constant;
 import com.yufan.utils.pay.alipay.AlipayConfig;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,11 +41,11 @@ public class PayResultNotice {
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/notice/alipay
-     * 微信支付结果通知
+     * 支付宝支付结果通知（25小时以内完成8次通知（通知的间隔频率一般是：4m,10m,10m,1h,2h,6h,15h））
      */
     @RequestMapping("alipay")
     public void payResultNoticeAlipay(HttpServletRequest request, HttpServletResponse response) {
-        LOG.info("-----支付宝支付最终结果通知------：");
+        LOG.info("--payResultNoticeAlipay---支付宝支付最终结果通知------：");
         PrintWriter out = null;
         try {
             out = response.getWriter();
@@ -73,12 +74,7 @@ public class PayResultNotice {
             String sellerId = new String(request.getParameter("seller_id").getBytes("ISO-8859-1"), "UTF-8");
             //本次交易支付的订单金额，单位为人民币（元）
             String totalAmount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
-            LOG.info("---outTradeNo:" + outTradeNo);
-            LOG.info("---tradeNo:" + tradeNo);
-            LOG.info("---tradeStatus:" + tradeStatus);
-            LOG.info("---sellerId:" + sellerId);
-            LOG.info("---totalAmount:" + totalAmount);
-            LOG.info("---params:" + params);
+            LOG.info("--payResultNoticeAlipay-params:" + params);
             //计算得出通知验证结果
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
@@ -146,22 +142,25 @@ public class PayResultNotice {
      */
     void doTradeRecord(Integer payWay, String tradeNo, String partnerTradeNo, String sellerId, String totalAmount) {
         try {
-            TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByTradeNo(tradeNo);
+            TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByPartnerTradeNo(partnerTradeNo);
             if (null == tradeRecord) {
-                LOG.info("------tradeRecord查询不存在-------");
+                LOG.info("--doTradeRecord----tradeRecord查询不存在-------partnerTradeNo:" + partnerTradeNo);
                 return;
             }
             int tradeStatus = tradeRecord.getStatus();
             if (tradeStatus != Constant.TRADE_STATUS_0) {
-                LOG.info("------tradeNo已处理-------" + tradeNo);
+                LOG.info("--doTradeRecord---tradeNo已处理-------" + tradeNo);
                 return;
             }
             if (Constant.PAY_WAY_2 == payWay) {
-                if (tradeRecord.getTradeAcount().equals(sellerId) && tradeRecord.getPrice().compareTo(new BigDecimal(totalAmount)) == 0) {
-                    LOG.info("---alipay--更新交易最终结果-----");
-                    iPayCenterService.finishTradeRecordStatus(tradeNo, "", Constant.TRADE_STATUS_1);//交易成功
-                    CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_1);
+                if (StringUtils.isNotEmpty(tradeRecord.getTradeNo()) && tradeRecord.getTradeAcount().equals(sellerId) && tradeRecord.getPrice().compareTo(new BigDecimal(totalAmount)) == 0) {
+                    LOG.info("-doTradeRecord--alipay--更新交易最终结果1-----");
+                    iPayCenterService.finishTradeRecordStatus(tradeNo, Constant.TRADE_STATUS_1);
+                } else {
+                    LOG.info("-doTradeRecord--alipay--更新交易最终结果2-----");
+                    iPayCenterService.finishTradeRecordStatus(partnerTradeNo, tradeNo, sellerId, Constant.TRADE_STATUS_1);//交易成功
                 }
+                CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_1);
             }
         } catch (Exception e) {
             LOG.error("---doTradeRecord---处理异常-----");

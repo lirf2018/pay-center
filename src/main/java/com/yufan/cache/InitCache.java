@@ -26,6 +26,25 @@ public class InitCache implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        initClientParam();
+    }
+
+    /**
+     * 初始化交易记录
+     */
+    private void initTradeRecord() {
+        try {
+
+        } catch (Exception e) {
+            LOG.error("-initTradeRecord--", e);
+        }
+    }
+
+
+    /**
+     * 初始化客户端系统参数
+     */
+    private void initClientParam() {
         try {
             List<TbClient> clients = iInitCacheService.loadClientList();
             List<TbClientConfig> clientConfigs = iInitCacheService.loadClientConfigList();
@@ -34,7 +53,7 @@ public class InitCache implements InitializingBean {
             LOG.info("-----clients:" + clients.size());
             LOG.info("-----clientConfigs:" + clientConfigs.size());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("-initClientParam--", e);
         }
     }
 }

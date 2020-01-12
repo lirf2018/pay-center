@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 创建时间:  2020/1/11 18:57
  * 功能介绍:
  */
-@Transactional(transactionManager = "transactionManagerPrimary")
+//@Transactional(transactionManager = "transactionManagerPrimary")
+@Transactional
 @Repository
 public class PayCenterDaoImpl implements IPayCenterDao {
 

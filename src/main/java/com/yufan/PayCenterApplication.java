@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 public class PayCenterApplication {
 
     public static void main(String[] args) {

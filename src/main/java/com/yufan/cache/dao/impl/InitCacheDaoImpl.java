@@ -15,7 +15,8 @@ import java.util.List;
  * 创建时间:  2020/1/11 19:27
  * 功能介绍: dao实现类
  */
-@Transactional(transactionManager = "transactionManagerPrimary")
+//@Transactional(transactionManager = "transactionManagerPrimary")
+@Transactional
 @Repository
 public class InitCacheDaoImpl implements IInitCacheDao {
     @Autowired

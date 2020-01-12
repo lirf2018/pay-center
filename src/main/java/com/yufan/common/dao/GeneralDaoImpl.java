@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional(transactionManager = "transactionManagerPrimary")
+//@Transactional(transactionManager = "transactionManagerPrimary")
+@Transactional
 public class GeneralDaoImpl implements IGeneralDao {
 
     @PersistenceUnit(unitName = "entityManagerFactoryPrimary")

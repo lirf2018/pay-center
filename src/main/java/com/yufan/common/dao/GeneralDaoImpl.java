@@ -19,10 +19,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +29,12 @@ import java.util.Map;
 @Transactional
 public class GeneralDaoImpl implements IGeneralDao {
 
-    @PersistenceUnit(unitName = "entityManagerFactoryPrimary")
-    private EntityManagerFactory entityManagerFactoryDb1;
-
+//    @PersistenceUnit(unitName = "entityManagerFactoryPrimary")
+//    private EntityManagerFactory entityManagerFactoryDb1;
+    @PersistenceContext
+    private EntityManager em;
     private Session getSession() {
-        return entityManagerFactoryDb1.createEntityManager().unwrap(org.hibernate.Session.class);
+        return em.unwrap(org.hibernate.Session.class);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class GeneralDaoImpl implements IGeneralDao {
         int pageSize = pageInfo.getPageSize();
 //        System.out.println("------------------------>查询页:"+currePage);
         // 分页查询结果
-        Query query = entityManagerFactoryDb1.createEntityManager().createNativeQuery(sqlQuery);
+        Query query = em.createNativeQuery(sqlQuery);
         query.setFirstResult((currePage - 1) * pageSize);//从第一条记录开始  mysql是从0开始
         query.setMaxResults(pageSize);
         // 查询结果总条数
@@ -55,7 +53,7 @@ public class GeneralDaoImpl implements IGeneralDao {
         if (!StringUtils.isEmpty(pageInfo.getSqlCount())) {
             sqlCount = pageInfo.getSqlCount();
         }
-        Query countQuery = entityManagerFactoryDb1.createEntityManager().createNativeQuery(sqlCount);
+        Query countQuery = em.createNativeQuery(sqlCount);
         List listCount = countQuery.getResultList();
         total = listCount.size() > 0 ? Integer.parseInt(listCount.get(0).toString()) : 0;
         pageInfo.setRecordSum(total);

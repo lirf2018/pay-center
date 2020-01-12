@@ -1,0 +1,46 @@
+CREATE TABLE `tb_client` (
+  `client_id` int(11) NOT NULL,
+  `secret_key` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '秘钥',
+  `client_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '系统名称',
+  `client_code` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '系统编码',
+  `quit_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '缺省：支付中途退出地址',
+  `return_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '缺省：支付最终结果跳转地址',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint(5) DEFAULT NULL COMMENT '状态1有效 0无效',
+  PRIMARY KEY (`client_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户端app信息表';
+
+CREATE TABLE `tb_client_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) DEFAULT NULL COMMENT '客户端标识',
+  `business_code` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '支付业务编码',
+  `quit_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '支付中途退出地址',
+  `return_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '支付最终结果跳转地址',
+  `create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_client_id_business_code` (`client_id`,`business_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='客户端app业务配置表';
+
+CREATE TABLE `tb_trade_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(100) DEFAULT NULL COMMENT '订单号',
+  `trade_no` varchar(100) DEFAULT NULL COMMENT '第三方平台返回的交易单号（如微信返回的）',
+  `partner_trade_no` varchar(100) DEFAULT NULL COMMENT '商户订单号(作为调用第三方支付平台的凭证)或交易流水号或退款流水号',
+  `record_type` tinyint(10) DEFAULT NULL COMMENT '事项 1 订单退押金 2 订单退款 3 提现 4 订单支付',
+  `status` tinyint(5) DEFAULT NULL COMMENT '状态 0 等待操作 1成功 2 失败  3异常',
+  `remark` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '失败备注',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL COMMENT '交易金额',
+  `pay_way` tinyint(5) DEFAULT NULL COMMENT '交易方式 1 微信2 支付宝',
+  `trade_acount` varchar(100) DEFAULT NULL COMMENT '交易到账账号',
+  `finish_time` datetime DEFAULT NULL COMMENT '完成时间',
+  `submit_time` datetime DEFAULT NULL COMMENT '提交时间',
+  `return_url` varchar(200) DEFAULT NULL COMMENT '支付结果通知地址',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_partner_trade_no` (`partner_trade_no`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='交易记录表';
+
+INSERT INTO `pay_center`.`tb_client`(`client_id`, `secret_key`, `client_name`, `client_code`, `quit_url`, `return_url`, `create_time`, `update_time`, `status`) VALUES (1, 'dsfsdfsd', '商城', 'h5-web', 'http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault', 'http://lirf-shop.51vip.biz/h5-web/pay/success', '2020-01-11 19:40:23', '2020-01-11 23:13:30', 1);
+INSERT INTO `pay_center`.`tb_client_config`(`id`, `client_id`, `business_code`, `quit_url`, `return_url`, `create_time`) VALUES (1, 1, 'order_pay', 'http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault', 'http://lirf-shop.51vip.biz/h5-web/pay/success', '2020-01-11 19:45:36');

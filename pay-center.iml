@@ -18,6 +18,8 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
+          <factory-entry name="entityManagerFactoryDb1" />
+          <factory-entry name="entityManagerFactoryDb2" />
           <factory-entry name="noname-a.xml@0" value="b3994240-bb79-41ca-a024-42eba0c30377" />
         </datasource-mapping>
         <naming-strategy-map />

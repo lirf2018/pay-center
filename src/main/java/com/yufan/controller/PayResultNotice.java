@@ -1,7 +1,7 @@
 package com.yufan.controller;
 
 import com.alipay.api.internal.util.AlipaySignature;
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.pojo1.TbTradeRecord;
 import com.yufan.service.IPayCenterService;
 import com.yufan.utils.CacheConstant;
 import com.yufan.utils.Constant;

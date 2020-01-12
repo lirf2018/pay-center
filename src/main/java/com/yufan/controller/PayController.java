@@ -2,8 +2,8 @@ package com.yufan.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.yufan.dao.IOrderDao;
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.dao.db2.IOrderDao;
+import com.yufan.pojo1.TbTradeRecord;
 import com.yufan.service.IPayCenterService;
 import com.yufan.utils.*;
 import com.yufan.utils.pay.alipay.AlipayConfig;

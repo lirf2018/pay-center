@@ -1,6 +1,6 @@
 package com.yufan.service;
 
-import com.yufan.pojo.TbOrder;
+import com.yufan.pojo2.TbOrder;
 
 import java.util.List;
 import java.util.Map;

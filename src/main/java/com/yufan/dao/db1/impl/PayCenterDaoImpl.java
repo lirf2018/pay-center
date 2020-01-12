@@ -1,8 +1,8 @@
-package com.yufan.dao.impl;
+package com.yufan.dao.db1.impl;
 
 import com.yufan.common.IGeneralDao;
-import com.yufan.dao.IPayCenterDao;
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.dao.db1.IPayCenterDao;
+import com.yufan.pojo1.TbTradeRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 创建时间:  2020/1/11 18:57
  * 功能介绍:
  */
-@Transactional(transactionManager = "transactionManagerDb1")
+@Transactional(transactionManager = "transactionManagerPrimary")
 @Repository
 public class PayCenterDaoImpl implements IPayCenterDao {
 

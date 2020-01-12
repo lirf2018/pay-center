@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional(transactionManager = "transactionManagerDb1")
+@Transactional(transactionManager = "transactionManagerPrimary")
 public class GeneralDaoImpl implements IGeneralDao {
 
-    @PersistenceUnit(unitName = "entityManagerFactoryDb1")
+    @PersistenceUnit(unitName = "entityManagerFactoryPrimary")
     private EntityManagerFactory entityManagerFactoryDb1;
 
     private Session getSession() {

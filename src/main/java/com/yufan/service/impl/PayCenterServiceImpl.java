@@ -1,7 +1,7 @@
 package com.yufan.service.impl;
 
-import com.yufan.dao.IPayCenterDao;
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.dao.db1.IPayCenterDao;
+import com.yufan.pojo1.TbTradeRecord;
 import com.yufan.service.IPayCenterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

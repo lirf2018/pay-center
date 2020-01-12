@@ -1,4 +1,4 @@
-package com.yufan.pojo;
+package com.yufan.pojo2;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

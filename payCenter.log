@@ -2651,3 +2651,227 @@ Caused by: javax.persistence.TransactionRequiredException: Executing an update/d
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
 	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
 	... 75 more
+2020-01-12 19:05:07 [restartedMain] INFO  [com.yufan.cache.InitCache] - -----clients:1
+2020-01-12 19:05:07 [restartedMain] INFO  [com.yufan.cache.InitCache] - -----clientConfigs:1
+2020-01-12 19:05:15 [http-nio-8087-exec-2] INFO  [com.yufan.utils.VerifySign] - ---------json:{"order_no":"20191018193238251261","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827114"}
+2020-01-12 19:05:15 [http-nio-8087-exec-2] INFO  [com.yufan.utils.VerifySign] - ---------secretKey:dsfsdfsd
+2020-01-12 19:05:15 [http-nio-8087-exec-2] INFO  [com.yufan.controller.TestController] - ----请求支付参数-----{"order_no":"20191018193238251261","sign":"119d4d55d091caa45b16a6833e373529","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827114"}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ------------>base64Str:eyJvcmRlcl9ubyI6IjIwMTkxMDE4MTkzMjM4MjUxMjYxIiwic2lnbiI6IjExOWQ0ZDU1ZDA5MWNhYTQ1YjE2YTY4MzNlMzczNTI5IiwiYnVzaW5lc3NfY29kZSI6Im9yZGVyX3BheSIsInBheV93YXkiOjIsInJlY29yZF90eXBlIjo0LCJjbGllbnRfY29kZSI6Img1LXdlYiIsInRpbWVzdGFtcCI6IjE1Nzg4MjcxMTQifQ==
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ------------>base64Str明文:{"order_no":"20191018193238251261","sign":"119d4d55d091caa45b16a6833e373529","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827114"}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------json:{"order_no":"20191018193238251261","business_code":"order_pay","record_type":4,"pay_way":2,"client_code":"h5-web","timestamp":"1578827114"}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------secretKey:dsfsdfsd
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------clientSign:119d4d55d091caa45b16a6833e373529
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------orderNo:20191018193238251261
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------goodsName:绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------orderPrice:15.00
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------partnerTradeNo:20200112190515137968
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - -----调用支付宝支付接口-----
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.utils.pay.alipay.AlipayUtils] - -----调用支付宝支付接口参数-----param:{"goods_name":"绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩","quit_url":"http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault","partner_trade_no":"20200112190515137968","order_price":15.00}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.utils.pay.alipay.AlipayUtils] - ------调用成功--------response:{"body":"<form name=\"punchout_form\" method=\"post\" action=\"https://openapi.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.wap.pay&sign=JhxGwc%2FRdhzzj7zmsvprVyDjfYi17dSswKdbfT7TSFYALCQD7F4e4OhfAIv6gU3u2kQLqbUS7FbazbR8izJ2frTDjEfAirCeDwI%2BpoBhrs0I5TLMGWAB7zkgaN%2Bk3WtQwFtiVtGMJPXHkxZ0MuJEPmHrZQULex%2FNH0UUlimTuTGZACL7%2Bf4RNrrzKHXiGeybL0TlRnrbAbdsF1sYdK4xTMdS5lAdzNEh7XEP4W1ojT3cxijf2EMq5ZK14troc7rMJQNyT8jZOv%2FC8PjjcFLN7iGSpu%2FC7Hd43j0za81JytlEVeZfhINlwtZgaHWlcxl1fueMjrlv3hLDCT1beQnuEQ%3D%3D&return_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fpay%2FalipayReturnPage&notify_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fnotice%2Falipay&version=1.0&app_id=2016092900624822&sign_type=RSA2&timestamp=2020-01-12+19%3A05%3A15&alipay_sdk=alipay-sdk-java-3.3.0&format=json\">\n<input type=\"hidden\" name=\"biz_content\" value=\"{&quot;out_trade_no&quot;:&quot;20200112190515137968&quot;,&quot;total_amount&quot;:&quot;15.00&quot;,&quot;quit_url&quot;:&quot;http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault&quot;,&quot;subject&quot;:&quot;绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩&quot;,&quot;product_code&quot;:&quot;QUICK_WAP_WAY&quot;}\">\n<input type=\"submit\" value=\"立即支付\" style=\"display:none\" >\n</form>\n<script>document.forms[0].submit();</script>","success":true}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - --------{"msg":"","code":1,"body":"<form name=\"punchout_form\" method=\"post\" action=\"https://openapi.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.wap.pay&sign=JhxGwc%2FRdhzzj7zmsvprVyDjfYi17dSswKdbfT7TSFYALCQD7F4e4OhfAIv6gU3u2kQLqbUS7FbazbR8izJ2frTDjEfAirCeDwI%2BpoBhrs0I5TLMGWAB7zkgaN%2Bk3WtQwFtiVtGMJPXHkxZ0MuJEPmHrZQULex%2FNH0UUlimTuTGZACL7%2Bf4RNrrzKHXiGeybL0TlRnrbAbdsF1sYdK4xTMdS5lAdzNEh7XEP4W1ojT3cxijf2EMq5ZK14troc7rMJQNyT8jZOv%2FC8PjjcFLN7iGSpu%2FC7Hd43j0za81JytlEVeZfhINlwtZgaHWlcxl1fueMjrlv3hLDCT1beQnuEQ%3D%3D&return_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fpay%2FalipayReturnPage&notify_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fnotice%2Falipay&version=1.0&app_id=2016092900624822&sign_type=RSA2&timestamp=2020-01-12+19%3A05%3A15&alipay_sdk=alipay-sdk-java-3.3.0&format=json\">\n<input type=\"hidden\" name=\"biz_content\" value=\"{&quot;out_trade_no&quot;:&quot;20200112190515137968&quot;,&quot;total_amount&quot;:&quot;15.00&quot;,&quot;quit_url&quot;:&quot;http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault&quot;,&quot;subject&quot;:&quot;绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩&quot;,&quot;product_code&quot;:&quot;QUICK_WAP_WAY&quot;}\">\n<input type=\"submit\" value=\"立即支付\" style=\"display:none\" >\n</form>\n<script>document.forms[0].submit();</script>"}
+2020-01-12 19:05:15 [http-nio-8087-exec-3] ERROR [com.yufan.controller.PayController] - --异常---
+org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+	at org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(EntityManagerFactoryUtils.java:403)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:257)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:528)
+	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:153)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:366)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:99)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689)
+	at com.yufan.common.dao.GeneralDaoImpl$$EnhancerBySpringCGLIB$$4ff57b5d.executeUpdateForSQL(<generated>)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl.updateTradeRecord(PayCenterDaoImpl.java:52)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl$$FastClassBySpringCGLIB$$b9ca6a68.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:769)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:366)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:99)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl$$EnhancerBySpringCGLIB$$a80beae6.updateTradeRecord(<generated>)
+	at com.yufan.service.impl.PayCenterServiceImpl.updateTradeRecord(PayCenterServiceImpl.java:42)
+	at com.yufan.controller.PayController.payEnter(PayController.java:230)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1579)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: javax.persistence.TransactionRequiredException: Executing an update/delete query
+	at org.hibernate.internal.AbstractSharedSessionContract.checkTransactionNeededForUpdateOperation(AbstractSharedSessionContract.java:409)
+	at org.hibernate.query.internal.AbstractProducedQuery.executeUpdate(AbstractProducedQuery.java:1601)
+	at com.yufan.common.dao.GeneralDaoImpl.executeUpdateForSQL(GeneralDaoImpl.java:168)
+	at com.yufan.common.dao.GeneralDaoImpl$$FastClassBySpringCGLIB$$fe365c85.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:769)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	... 75 more
+2020-01-12 19:07:37 [restartedMain] INFO  [com.yufan.cache.InitCache] - -----clients:1
+2020-01-12 19:07:37 [restartedMain] INFO  [com.yufan.cache.InitCache] - -----clientConfigs:1
+2020-01-12 19:07:50 [http-nio-8087-exec-2] INFO  [com.yufan.utils.VerifySign] - ---------json:{"order_no":"20191018193238251261","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827270"}
+2020-01-12 19:07:50 [http-nio-8087-exec-2] INFO  [com.yufan.utils.VerifySign] - ---------secretKey:dsfsdfsd
+2020-01-12 19:07:50 [http-nio-8087-exec-2] INFO  [com.yufan.controller.TestController] - ----请求支付参数-----{"order_no":"20191018193238251261","sign":"2e8950eef49fdafc05660113636696f7","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827270"}
+2020-01-12 19:07:50 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ------------>base64Str:eyJvcmRlcl9ubyI6IjIwMTkxMDE4MTkzMjM4MjUxMjYxIiwic2lnbiI6IjJlODk1MGVlZjQ5ZmRhZmMwNTY2MDExMzYzNjY5NmY3IiwiYnVzaW5lc3NfY29kZSI6Im9yZGVyX3BheSIsInBheV93YXkiOjIsInJlY29yZF90eXBlIjo0LCJjbGllbnRfY29kZSI6Img1LXdlYiIsInRpbWVzdGFtcCI6IjE1Nzg4MjcyNzAifQ==
+2020-01-12 19:07:50 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ------------>base64Str明文:{"order_no":"20191018193238251261","sign":"2e8950eef49fdafc05660113636696f7","business_code":"order_pay","pay_way":2,"record_type":4,"client_code":"h5-web","timestamp":"1578827270"}
+2020-01-12 19:07:50 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------json:{"order_no":"20191018193238251261","business_code":"order_pay","record_type":4,"pay_way":2,"client_code":"h5-web","timestamp":"1578827270"}
+2020-01-12 19:07:50 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------secretKey:dsfsdfsd
+2020-01-12 19:07:50 [http-nio-8087-exec-3] INFO  [com.yufan.utils.VerifySign] - ---------clientSign:2e8950eef49fdafc05660113636696f7
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------orderNo:20191018193238251261
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------goodsName:绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------orderPrice:15.00
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - ---------partnerTradeNo:20200112190750788194
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - -----调用支付宝支付接口-----
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.utils.pay.alipay.AlipayUtils] - -----调用支付宝支付接口参数-----param:{"goods_name":"绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩","quit_url":"http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault","partner_trade_no":"20200112190750788194","order_price":15.00}
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.utils.pay.alipay.AlipayUtils] - ------调用成功--------response:{"body":"<form name=\"punchout_form\" method=\"post\" action=\"https://openapi.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.wap.pay&sign=dnjUmV4xSrgALo3MGXbHOGvYZrPbPvxchys716%2FTi42PtpQf7K%2FgQWaGI3a3C2%2BNY2hA1ax0qXU5bIdvkg8um02vSk%2BeEvbZwNvRqtnUmoFOK%2FrqNSo7NnYbqbnopm6EQ154wa2q3LligXI%2FG%2Be%2B1dYSNN7iHPakcv%2FKELCz3tWXrbN6VBIASo7IiKfdIYqqo2P6o24T3ct8IXuJ8iaEzGUNpoHnd650tK7FfIcH84sVVMST%2FtPv2JAWlDGOpbrxo03sMnsLVFHBoclnX7zNF8EVilP9pxddhpdknfIQ8jtlG3OXS4NnWP3VfLFJxL2M%2FURV09LM0c%2BwmXHwkS4YzQ%3D%3D&return_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fpay%2FalipayReturnPage&notify_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fnotice%2Falipay&version=1.0&app_id=2016092900624822&sign_type=RSA2&timestamp=2020-01-12+19%3A07%3A51&alipay_sdk=alipay-sdk-java-3.3.0&format=json\">\n<input type=\"hidden\" name=\"biz_content\" value=\"{&quot;out_trade_no&quot;:&quot;20200112190750788194&quot;,&quot;total_amount&quot;:&quot;15.00&quot;,&quot;quit_url&quot;:&quot;http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault&quot;,&quot;subject&quot;:&quot;绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩&quot;,&quot;product_code&quot;:&quot;QUICK_WAP_WAY&quot;}\">\n<input type=\"submit\" value=\"立即支付\" style=\"display:none\" >\n</form>\n<script>document.forms[0].submit();</script>","success":true}
+2020-01-12 19:07:51 [http-nio-8087-exec-3] INFO  [com.yufan.controller.PayController] - --------{"msg":"","code":1,"body":"<form name=\"punchout_form\" method=\"post\" action=\"https://openapi.alipaydev.com/gateway.do?charset=UTF-8&method=alipay.trade.wap.pay&sign=dnjUmV4xSrgALo3MGXbHOGvYZrPbPvxchys716%2FTi42PtpQf7K%2FgQWaGI3a3C2%2BNY2hA1ax0qXU5bIdvkg8um02vSk%2BeEvbZwNvRqtnUmoFOK%2FrqNSo7NnYbqbnopm6EQ154wa2q3LligXI%2FG%2Be%2B1dYSNN7iHPakcv%2FKELCz3tWXrbN6VBIASo7IiKfdIYqqo2P6o24T3ct8IXuJ8iaEzGUNpoHnd650tK7FfIcH84sVVMST%2FtPv2JAWlDGOpbrxo03sMnsLVFHBoclnX7zNF8EVilP9pxddhpdknfIQ8jtlG3OXS4NnWP3VfLFJxL2M%2FURV09LM0c%2BwmXHwkS4YzQ%3D%3D&return_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fpay%2FalipayReturnPage&notify_url=http%3A%2F%2Flirf-shop.51vip.biz%3A25139%2Fpay-center%2Fnotice%2Falipay&version=1.0&app_id=2016092900624822&sign_type=RSA2&timestamp=2020-01-12+19%3A07%3A51&alipay_sdk=alipay-sdk-java-3.3.0&format=json\">\n<input type=\"hidden\" name=\"biz_content\" value=\"{&quot;out_trade_no&quot;:&quot;20200112190750788194&quot;,&quot;total_amount&quot;:&quot;15.00&quot;,&quot;quit_url&quot;:&quot;http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault&quot;,&quot;subject&quot;:&quot;绿萝盆栽室内净化空气吸除甲醛花卉吊兰办公室绿植物水培长藤绿箩&quot;,&quot;product_code&quot;:&quot;QUICK_WAP_WAY&quot;}\">\n<input type=\"submit\" value=\"立即支付\" style=\"display:none\" >\n</form>\n<script>document.forms[0].submit();</script>"}
+2020-01-12 19:07:51 [http-nio-8087-exec-3] ERROR [com.yufan.controller.PayController] - --异常---
+org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query
+	at org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(EntityManagerFactoryUtils.java:403)
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:257)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:528)
+	at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+	at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:153)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:366)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:99)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689)
+	at com.yufan.common.dao.GeneralDaoImpl$$EnhancerBySpringCGLIB$$b729e423.executeUpdateForSQL(<generated>)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl.updateTradeRecord(PayCenterDaoImpl.java:52)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl$$FastClassBySpringCGLIB$$b9ca6a68.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:769)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:366)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:99)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689)
+	at com.yufan.dao.db1.impl.PayCenterDaoImpl$$EnhancerBySpringCGLIB$$f4053ac.updateTradeRecord(<generated>)
+	at com.yufan.service.impl.PayCenterServiceImpl.updateTradeRecord(PayCenterServiceImpl.java:42)
+	at com.yufan.controller.PayController.payEnter(PayController.java:230)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:408)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:861)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1579)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: javax.persistence.TransactionRequiredException: Executing an update/delete query
+	at org.hibernate.internal.AbstractSharedSessionContract.checkTransactionNeededForUpdateOperation(AbstractSharedSessionContract.java:409)
+	at org.hibernate.query.internal.AbstractProducedQuery.executeUpdate(AbstractProducedQuery.java:1601)
+	at com.yufan.common.dao.GeneralDaoImpl.executeUpdateForSQL(GeneralDaoImpl.java:168)
+	at com.yufan.common.dao.GeneralDaoImpl$$FastClassBySpringCGLIB$$fe365c85.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:769)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:139)
+	... 75 more

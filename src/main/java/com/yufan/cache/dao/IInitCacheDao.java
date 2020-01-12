@@ -1,7 +1,7 @@
 package com.yufan.cache.dao;
 
-import com.yufan.pojo.TbClient;
-import com.yufan.pojo.TbClientConfig;
+import com.yufan.pojo1.TbClient;
+import com.yufan.pojo1.TbClientConfig;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package com.yufan.dao.impl;
+package com.yufan.dao.db2.impl;
 
 import com.yufan.common.IGeneralDao2;
-import com.yufan.dao.IOrderDao;
-import com.yufan.pojo.TbOrder;
+import com.yufan.dao.db2.IOrderDao;
+import com.yufan.pojo2.TbOrder;
 import com.yufan.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import java.util.Map;
  * 创建时间:  2020/1/11 22:32
  * 功能介绍:
  */
-@Transactional(transactionManager = "transactionManagerDb2")
+@Transactional(transactionManager = "transactionManagerSecond")
 @Repository
 public class OrderDaoImpl implements IOrderDao {
 

@@ -1,8 +1,8 @@
 package com.yufan.cache;
 
 import com.yufan.cache.service.IInitCacheService;
-import com.yufan.pojo.TbClient;
-import com.yufan.pojo.TbClientConfig;
+import com.yufan.pojo1.TbClient;
+import com.yufan.pojo1.TbClientConfig;
 import com.yufan.utils.CacheConstant;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;

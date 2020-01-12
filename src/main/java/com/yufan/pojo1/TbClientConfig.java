@@ -1,4 +1,4 @@
-package com.yufan.pojo;
+package com.yufan.pojo1;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

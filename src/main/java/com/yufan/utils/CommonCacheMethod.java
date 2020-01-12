@@ -1,12 +1,10 @@
 package com.yufan.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yufan.pojo.TbClient;
-import com.yufan.pojo.TbClientConfig;
+import com.yufan.pojo1.TbClient;
+import com.yufan.pojo1.TbClientConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
-import java.util.Random;
 
 /**
  * 创建人: lirf

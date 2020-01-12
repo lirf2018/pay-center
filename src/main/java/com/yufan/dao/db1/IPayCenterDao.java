@@ -1,6 +1,6 @@
-package com.yufan.dao;
+package com.yufan.dao.db1;
 
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.pojo1.TbTradeRecord;
 
 /**
  * 创建人: lirf

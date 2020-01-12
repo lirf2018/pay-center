@@ -1,7 +1,7 @@
 package com.yufan.service.impl;
 
-import com.yufan.dao.IOrderDao;
-import com.yufan.pojo.TbOrder;
+import com.yufan.dao.db2.IOrderDao;
+import com.yufan.pojo2.TbOrder;
 import com.yufan.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

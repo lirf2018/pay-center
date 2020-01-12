@@ -21,25 +21,25 @@ import javax.sql.DataSource;
  * 创建时间:  2020/1/12 14:56
  * 功能介绍:
  */
-@Configuration
-@EnableTransactionManagement
+//@Configuration
+//@EnableTransactionManagement
 public class DB2Config {
 
-    @Autowired
-    @Qualifier("db2DataSource")
-    private DataSource db2DataSource;
-
-    @Bean(name = "entityManagerFactoryDb2")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryDb2 (EntityManagerFactoryBuilder builder) {
-        return builder
-                .dataSource(db2DataSource)
-                .packages("com.yufan.pojo") //设置实体类所在位置
-                .build();
-    }
-
-
-    @Bean(name = "transactionManagerDb2")
-    public PlatformTransactionManager transactionManagerDb2(EntityManagerFactoryBuilder builder) {
-        return new JpaTransactionManager(entityManagerFactoryDb2(builder).getObject());
-    }
+//    @Autowired
+//    @Qualifier("db2DataSource")
+//    private DataSource db2DataSource;
+//
+//    @Bean(name = "entityManagerFactoryDb2")
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactoryDb2 (EntityManagerFactoryBuilder builder) {
+//        return builder
+//                .dataSource(db2DataSource)
+//                .packages("com.yufan.pojo") //设置实体类所在位置
+//                .build();
+//    }
+//
+//
+//    @Bean(name = "transactionManagerDb2")
+//    public PlatformTransactionManager transactionManagerDb2(EntityManagerFactoryBuilder builder) {
+//        return new JpaTransactionManager(entityManagerFactoryDb2(builder).getObject());
+//    }
 }

@@ -1,6 +1,6 @@
 package com.yufan.service;
 
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.pojo1.TbTradeRecord;
 
 /**
  * 创建人: lirf

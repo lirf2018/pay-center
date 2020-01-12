@@ -1,8 +1,8 @@
 package com.yufan.utils;
 
-import com.yufan.pojo.TbClient;
-import com.yufan.pojo.TbClientConfig;
-import com.yufan.pojo.TbTradeRecord;
+import com.yufan.pojo1.TbClient;
+import com.yufan.pojo1.TbClientConfig;
+import com.yufan.pojo1.TbTradeRecord;
 
 import java.util.*;
 

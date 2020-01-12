@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional(transactionManager = "transactionManagerDb2")
+@Transactional(transactionManager = "transactionManagerSecond")
 public class GeneralDaoImpl2 implements IGeneralDao2 {
 
-    @PersistenceUnit(unitName = "entityManagerFactoryDb2")
+    @PersistenceUnit(unitName = "entityManagerFactorySecond")
     private EntityManagerFactory entityManagerFactoryDb2;
 
     private Session getSession() {

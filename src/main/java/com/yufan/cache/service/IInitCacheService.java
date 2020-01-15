@@ -4,6 +4,7 @@ import com.yufan.pojo1.TbClient;
 import com.yufan.pojo1.TbClientConfig;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 创建人: lirf
@@ -26,5 +27,14 @@ public interface IInitCacheService {
      * @return
      */
     public List<TbClientConfig> loadClientConfigList();
+
+
+    /**
+     * 查询交易记录
+     *
+     * @param date
+     * @return
+     */
+    public List<Map<String, Object>> queryTradeRecord(String date);
 
 }

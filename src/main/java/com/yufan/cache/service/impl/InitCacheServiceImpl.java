@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 创建人: lirf
@@ -28,5 +29,10 @@ public class InitCacheServiceImpl implements IInitCacheService {
     @Override
     public List<TbClientConfig> loadClientConfigList() {
         return iInitCacheDao.loadClientConfigList();
+    }
+
+    @Override
+    public List<Map<String, Object>> queryTradeRecord(String date) {
+        return iInitCacheDao.queryTradeRecord(date);
     }
 }

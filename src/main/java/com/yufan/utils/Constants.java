@@ -5,7 +5,22 @@ package com.yufan.utils;
  * 创建时间:  2020/1/11 22:12
  * 功能介绍:
  */
-public class Constant {
+public class Constants {
+
+    /**
+     * 商城接口地址
+     */
+    public static String STORE_INFO_URL = "http://127.0.0.1:8082/store-info/service";
+
+    /**
+     * 接口秘钥
+     */
+    public static String SECRET_KEY = "pay-center-test";
+
+    /**
+     * 商城接口业务
+     */
+    public static String PAY_NOTICE = "pay_notice";//支付成功通知
 
 
     /**

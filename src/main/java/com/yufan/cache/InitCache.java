@@ -4,6 +4,7 @@ import com.yufan.cache.service.IInitCacheService;
 import com.yufan.pojo1.TbClient;
 import com.yufan.pojo1.TbClientConfig;
 import com.yufan.utils.CacheConstant;
+import com.yufan.utils.DatetimeUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,6 @@ public class InitCache implements InitializingBean {
     }
 
     /**
-     * 初始化交易记录
-     */
-    private void initTradeRecord() {
-        try {
-
-        } catch (Exception e) {
-            LOG.error("-initTradeRecord--", e);
-        }
-    }
-
-
-    /**
      * 初始化客户端系统参数
      */
     private void initClientParam() {
@@ -55,5 +44,12 @@ public class InitCache implements InitializingBean {
         } catch (Exception e) {
             LOG.error("-initClientParam--", e);
         }
+    }
+
+    public static void main(String[] args) {
+        String format = "yyyy-MM-dd HH:mm:ss";
+        String now = DatetimeUtil.getNow();
+        String date = DatetimeUtil.getDateLastOrNext(format, now, -CacheConstant.addPassDay);
+        System.out.println(date);
     }
 }

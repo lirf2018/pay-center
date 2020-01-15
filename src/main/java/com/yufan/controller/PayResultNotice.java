@@ -4,7 +4,9 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.yufan.pojo1.TbTradeRecord;
 import com.yufan.service.IPayCenterService;
 import com.yufan.utils.CacheConstant;
-import com.yufan.utils.Constant;
+import com.yufan.utils.Constants;
+import com.yufan.utils.DatetimeUtil;
+import com.yufan.utils.StoreInfoUtil;
 import com.yufan.utils.pay.alipay.AlipayConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -41,7 +43,7 @@ public class PayResultNotice {
 
     /**
      * http://lirf-shop.51vip.biz:25139/pay-center/notice/alipay
-     * 支付宝支付结果通知（25小时以内完成8次通知（通知的间隔频率一般是：4m,10m,10m,1h,2h,6h,15h））
+     * 支付宝支付结果最终通知（25小时以内完成8次通知（通知的间隔频率一般是：4m,10m,10m,1h,2h,6h,15h））
      */
     @RequestMapping("alipay")
     public void payResultNoticeAlipay(HttpServletRequest request, HttpServletResponse response) {
@@ -74,6 +76,13 @@ public class PayResultNotice {
             String sellerId = new String(request.getParameter("seller_id").getBytes("ISO-8859-1"), "UTF-8");
             //本次交易支付的订单金额，单位为人民币（元）
             String totalAmount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
+            //付款时间
+            String gmtPayment = DatetimeUtil.getNow();
+            if (StringUtils.isNotEmpty(request.getParameter("gmt_payment"))) {
+                LOG.info("-----gmt_payment--");
+                gmtPayment = new String(request.getParameter("gmt_payment").getBytes("ISO-8859-1"), "UTF-8");
+            }
+
             LOG.info("--payResultNoticeAlipay-params:" + params);
             //计算得出通知验证结果
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
@@ -84,7 +93,7 @@ public class PayResultNotice {
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-                    doTradeRecord(Constant.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount);
+                    doTradeRecord(Constants.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount, gmtPayment);
                     //注意：
                     //如果签约的是可退款协议，退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
                     //如果没有签约可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
@@ -93,7 +102,7 @@ public class PayResultNotice {
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                     //如果有做过处理，不执行商户的业务程序
-                    doTradeRecord(Constant.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount);
+                    doTradeRecord(Constants.PAY_WAY_2, tradeNo, outTradeNo, sellerId, totalAmount, gmtPayment);
                     //注意：
                     //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
                 }
@@ -139,8 +148,9 @@ public class PayResultNotice {
      * @param tradeNo        支付宝交易号
      * @param sellerId       收款支付宝账号
      * @param totalAmount    收款金额
+     * @param payTime        付款时间
      */
-    void doTradeRecord(Integer payWay, String tradeNo, String partnerTradeNo, String sellerId, String totalAmount) {
+    void doTradeRecord(Integer payWay, String tradeNo, String partnerTradeNo, String sellerId, String totalAmount, String payTime) {
         try {
             TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByPartnerTradeNo(partnerTradeNo);
             if (null == tradeRecord) {
@@ -148,19 +158,21 @@ public class PayResultNotice {
                 return;
             }
             int tradeStatus = tradeRecord.getStatus();
-            if (tradeStatus != Constant.TRADE_STATUS_0) {
+            if (tradeStatus != Constants.TRADE_STATUS_0) {
                 LOG.info("--doTradeRecord---tradeNo已处理-------" + tradeNo);
                 return;
             }
-            if (Constant.PAY_WAY_2 == payWay) {
+            String orderNo = tradeRecord.getOrderNo();//订单号
+            if (Constants.PAY_WAY_2 == payWay) {
                 if (StringUtils.isNotEmpty(tradeRecord.getTradeNo()) && tradeRecord.getTradeAcount().equals(sellerId) && tradeRecord.getPrice().compareTo(new BigDecimal(totalAmount)) == 0) {
                     LOG.info("-doTradeRecord--alipay--更新交易最终结果1-----");
-                    iPayCenterService.finishTradeRecordStatus(tradeNo, Constant.TRADE_STATUS_1);
+                    iPayCenterService.finishTradeRecordStatus(tradeNo, Constants.TRADE_STATUS_1);
                 } else {
                     LOG.info("-doTradeRecord--alipay--更新交易最终结果2-----");
-                    iPayCenterService.finishTradeRecordStatus(partnerTradeNo, tradeNo, sellerId, Constant.TRADE_STATUS_1);//交易成功
+                    iPayCenterService.finishTradeRecordStatus(partnerTradeNo, tradeNo, sellerId, Constants.TRADE_STATUS_1);//交易成功
                 }
-                CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_1);
+                CacheConstant.payReusltMap.put(partnerTradeNo, Constants.TRADE_STATUS_1);
+                StoreInfoUtil.getInstance().payResultNotice(tradeNo, payTime, orderNo, payWay);
             }
         } catch (Exception e) {
             LOG.error("---doTradeRecord---处理异常-----");

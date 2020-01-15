@@ -180,7 +180,7 @@ public class PayController {
                 tradeRecord.setTradeNo(tradeNo);
                 tradeRecord.setPartnerTradeNo(partnerTradeNo);
                 tradeRecord.setRecordType(recordType.byteValue());
-                tradeRecord.setStatus(Constant.TRADE_STATUS_0.byteValue());//状态 0 等待操作 1成功 2 失败  3异常
+                tradeRecord.setStatus(Constants.TRADE_STATUS_0.byteValue());//状态 0 等待操作 1成功 2 失败  3异常
                 tradeRecord.setRemark("");
                 Timestamp time = new Timestamp(new Date().getTime());
                 tradeRecord.setCreateTime(time);
@@ -191,7 +191,7 @@ public class PayController {
                 tradeRecord.setReturnUrl(returnUrl + "?orderNo=" + orderNo);
                 //保存交易记录
                 iPayCenterService.saveObj(tradeRecord);
-                CacheConstant.payReusltMap.put(partnerTradeNo, Constant.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
+                CacheConstant.payReusltMap.put(partnerTradeNo, Constants.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
                 String passTime = DatetimeUtil.convertDateToStr(DatetimeUtil.addDays(new Date(), CacheConstant.addPassDay));
                 CacheConstant.payReusltRemoveMap.put(partnerTradeNo, passTime);//用于记录移除缓存标识
 
@@ -214,12 +214,12 @@ public class PayController {
                     JSONObject result = AlipayUtils.getInstance().alipayInf(paramData);//请求接口
                     LOG.info("--------" + result);
                     int code = result.getInteger("code");//第三方接口提交状态
-                    int tradeStatus = Constant.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
+                    int tradeStatus = Constants.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
                     String sellerId = "";
                     String remark = "";
                     if (code == 1) {
                         //更新交易记录
-                        tradeStatus = Constant.TRADE_STATUS_0;
+                        tradeStatus = Constants.TRADE_STATUS_0;
                         sellerId = result.getString("sellerId") == null ? "" : result.getString("sellerId");
                         tradeNo = result.getString("tradeNo") == null ? "" : result.getString("tradeNo");
                         //缓存
@@ -236,10 +236,10 @@ public class PayController {
                     } else if (code == 2) {
                         LOG.info("---payEnter---支付失败-------");
                         remark = result.getString("msg");
-                        tradeStatus = Constant.TRADE_STATUS_2;
+                        tradeStatus = Constants.TRADE_STATUS_2;
                         iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
                     } else {
-                        tradeStatus = Constant.TRADE_STATUS_3;
+                        tradeStatus = Constants.TRADE_STATUS_3;
                     }
                     iPayCenterService.updateTradeRecord(partnerTradeNo, tradeNo, sellerId, remark, tradeStatus);
                 } else {
@@ -309,7 +309,7 @@ public class PayController {
                 //更新交易记录
                 if (0 == CacheConstant.payReusltMap.get(outTradeNo)) {
                     LOG.info("----alipayReturnPage--同步响应更新--");
-                    iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constant.TRADE_STATUS_0);
+                    iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constants.TRADE_STATUS_0);
                 }
             }
             if (verify_result) {
@@ -412,9 +412,9 @@ public class PayController {
         try {
             LOG.info("-------获取支付结果---------partnerTradeNo:" + partnerTradeNo);
             writer = response.getWriter();
-            int result = Constant.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
+            int result = Constants.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
             if (StringUtils.isNotEmpty(partnerTradeNo)) {
-                result = CacheConstant.payReusltMap.get(partnerTradeNo) == null ? Constant.TRADE_STATUS_0 : CacheConstant.payReusltMap.get(partnerTradeNo);
+                result = CacheConstant.payReusltMap.get(partnerTradeNo) == null ? Constants.TRADE_STATUS_0 : CacheConstant.payReusltMap.get(partnerTradeNo);
             }
             writer.print(result);
             writer.close();

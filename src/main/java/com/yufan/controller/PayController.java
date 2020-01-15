@@ -57,7 +57,7 @@ public class PayController {
      * <p>
      * 签名参数 ：
      * {
-     * "client_code": "",
+     * "sid": "",
      * "business_code": "",
      * "order_no": "",
      * "pay_way": "",1微信(weixin) 2 支付宝(alipay)
@@ -67,7 +67,7 @@ public class PayController {
      * <p>
      * 参数内容： paramData 如下
      * {
-     * "client_code": "",
+     * "sid": "",
      * "business_code": "",
      * "order_no": "",
      * "pay_way": "",1微信(weixin) 2 支付宝(alipay)
@@ -97,12 +97,12 @@ public class PayController {
             }
             if (null != param) {
                 JSONObject data = JSONObject.parseObject(param);
-                String clientCode = data.getString("client_code");//系统编码(用于查询系统秘钥)
+                String clientCode = data.getString("sid");//系统编码(用于查询系统秘钥)
                 String businessCode = data.getString("business_code");//系统业务（sysCode和businessCode查询相关结果跳转）
                 String orderNo = data.getString("order_no");//订单号
                 Integer payWay = data.getInteger("pay_way");//支付方式 1微信(weixin) 2 支付宝(alipay)
                 Integer recordType = data.getInteger("record_type");//事项 1 订单退押金 2 订单退款 3 提现 4 订单支付
-                String timestamp = data.getString("timestamp");//请求时间、13位
+                String timestamp = data.getString("timestamp");//请求时间、10位
                 String sign = data.getString("sign");//签名
                 if (null == payWay || StringUtils.isEmpty(clientCode) || StringUtils.isEmpty(businessCode) || StringUtils.isEmpty(orderNo)
                         || StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(sign) || null == recordType) {
@@ -125,14 +125,12 @@ public class PayController {
 
                 //支付中心验证签名
                 JSONObject json = new JSONObject();
-                json.put("client_code", clientCode);
                 json.put("business_code", businessCode);
-                json.put("record_type", recordType);
                 json.put("order_no", orderNo);
-                json.put("timestamp", timestamp);
                 json.put("pay_way", payWay);
+                json.put("record_type", recordType);
                 //校验秘钥
-                boolean checkSign = VerifySign.checkSign(json, secretKey, sign);
+                boolean checkSign = VerifySign.checkSign(json, clientCode, secretKey, timestamp, sign);
                 if (!checkSign) {
                     LOG.info("--payEnter---支付失败,支付中心签名验证失败---");
                     response.sendRedirect(request.getContextPath() + "/pay/page505");

@@ -16,19 +16,23 @@ public class VerifySign {
     /**
      * 签名校验
      *
-     * @param json      签名必要参数
-     * @param secretKey 客户端秘钥
-     * @param clientSign   客户端签名
+     * @param json       签名必要参数
+     * @param sid        客户端sid或者code
+     * @param timestamp  时间戳
+     * @param secretKey  客户端秘钥
+     * @param clientSign 客户端签名
      * @return
      */
-    public static boolean checkSign(JSONObject json, String secretKey, String clientSign) {
+    public static boolean checkSign(JSONObject json, String sid, String secretKey, String timestamp, String clientSign) {
         LOG.info("---------json:" + json);
         LOG.info("---------secretKey:" + secretKey);
         LOG.info("---------clientSign:" + clientSign);
         //传过来的sign
         try {
             MyMap map = new MyMap();
+            map.put("sid", sid);
             map.put("secretKey", secretKey);
+            map.put("timestamp", timestamp);
 
             for (Object k : json.keySet()) {
                 Object v = json.get(k);
@@ -49,13 +53,23 @@ public class VerifySign {
     }
 
 
-    public static String getSign(JSONObject json, String secretKey) {
+    /**
+     * 生成签名
+     *
+     * @param json
+     * @param secretKey
+     * @return
+     */
+    public static String getSign(JSONObject json, String sid, String secretKey, String timestamp) {
         LOG.info("---------json:" + json);
         LOG.info("---------secretKey:" + secretKey);
         //传过来的sign
         try {
             MyMap map = new MyMap();
+            //系统参数
+            map.put("sid", sid);
             map.put("secretKey", secretKey);
+            map.put("timestamp", timestamp);
 
             for (Object k : json.keySet()) {
                 Object v = json.get(k);

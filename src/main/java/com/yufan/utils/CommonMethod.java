@@ -136,9 +136,13 @@ public class CommonMethod {
         try {
             JSONObject out = new JSONObject();
             out.put("req_type", reqType);
-            out.put("sid", Constants.SECRET_KEY);
+            String timestamp = String.valueOf(System.currentTimeMillis()/1000);
+            String sign = VerifySign.getSign(data, Constants.SID, Constants.SECRET_KEY, timestamp);
+            out.put("sid", Constants.SID);
+            out.put("timestamp", timestamp);
+            out.put("sign", sign);
             out.put("data", data);
-            String result = RequestMethod.httpPost(Constants.STORE_INFO_URL, out.toString());
+            String result = RequestMethod.httpPost(Constants.INFO_URL, out.toString());
             if (StringUtils.isNotEmpty(result)) {
                 return JSONObject.parseObject(result);
             }

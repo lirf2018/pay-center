@@ -10,11 +10,12 @@ public class Constants {
     /**
      * 商城接口地址
      */
-    public static String STORE_INFO_URL = "http://127.0.0.1:8082/store-info/service";
+    public static String INFO_URL = "http://127.0.0.1:8082/store-info/service";
 
     /**
      * 接口秘钥
      */
+    public static String SID = "pay-center";
     public static String SECRET_KEY = "pay-center-test";
 
     /**

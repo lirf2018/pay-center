@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>payCenter</groupId>
-    <artifactId>pay-center</artifactId>
+    <artifactId>pay-center-8087</artifactId>
     <version>1.0.0</version>
     <name>pay-center</name>
     <description>Demo project for Spring Boot</description>
@@ -119,6 +119,14 @@
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.9.13.ALL</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

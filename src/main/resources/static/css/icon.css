@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'icon';
+  src: url('font_ydui/iconfont.ttf') format('truetype');
+}
+[class^="icon1-"]:before,
+[class*=" icon1-"]:before {
+  font-family: 'icon';
+  font-size: inherit;
+}
+.icon-watting-pay:before {
+  content: '\e636';
+}

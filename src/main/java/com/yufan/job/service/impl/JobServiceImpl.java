@@ -26,16 +26,16 @@ public class JobServiceImpl implements IJobService {
     @Override
     public void clearPayCache() {
         try {
-            if (null != CacheConstant.payReusltRemoveMap && CacheConstant.payReusltRemoveMap.size() > 0) {
-                for (Map.Entry<String, String> m : CacheConstant.payReusltRemoveMap.entrySet()) {
+            if (null != CacheConstant.payResultRemoveMap && CacheConstant.payResultRemoveMap.size() > 0) {
+                for (Map.Entry<String, String> m : CacheConstant.payResultRemoveMap.entrySet()) {
                     String partnerTradeNo = m.getKey();//支付中心流水号（商品唯一订单号）
                     String passTime = m.getValue();//过期时间
                     String format = "yyyy-MM-dd HH:mm:ss";
                     String now = DatetimeUtil.getNow(format);
                     if (DatetimeUtil.compareDate(now, passTime, format) > 0) {
                         //数据过期(清除缓存)
-                        CacheConstant.payReusltRemoveMap.remove(partnerTradeNo);
-                        CacheConstant.payReusltMap.remove(partnerTradeNo);//保存支付最终结果
+                        CacheConstant.payResultRemoveMap.remove(partnerTradeNo);
+                        CacheConstant.payResultMap.remove(partnerTradeNo);//保存支付最终结果
                         CacheConstant.payTradeRecordMap.remove(partnerTradeNo);//保存交易记录（当处理完毕时需要移除出缓存）
                     }
                 }

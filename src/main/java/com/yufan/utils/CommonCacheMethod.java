@@ -58,6 +58,7 @@ public class CommonCacheMethod {
                 return null;
             }
             JSONObject out = new JSONObject();
+            out.put("clientId", clientId);
             out.put("secretKey", secretKey);
             out.put("quitUrl", quitUrl);
             out.put("returnUrl", returnUrl);

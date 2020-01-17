@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>操作结果</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+	<base th:href="@{/}">
+	<link rel="stylesheet" href="./css/ydui.css?rev=@@hash"/>
+    <link rel="stylesheet" href="css/demo.css" />
+	<link rel="stylesheet" href="css/commondemo.css"/>
+	<link rel="stylesheet" href="css/phoneregister.css" />
+</head>
+<body>
+<section class="g-flexview">
+	<header class="m-navbar">
+        <a class="navbar-item"><i class="back-ico" onclick="javascript:history.go(-1)"></i></a>
+        <div class="navbar-center"><span class="navbar-title">操作结果</span></div>
+	</header>
+	<div class="header-height"></div>
+	
+    <section class="g-scrollview">
+    	<!-- 成功 -->
+    	<div class="result2-page-success" th:if="${code == 1}">
+    		<i class="icon-success-outline"></i>
+    	</div>
+    	<div class="result2-page" th:if="${code == 1}">
+    		<span>订单支付成功</span>
+    	</div>
+    	
+    	<!-- 失败 -->
+    	<div class="result2-page-fail" th:if="${code == 0}">
+    		<i class="icon-error-outline"></i>
+    	</div>
+    	<div class="result2-page" th:if="${code == 0}">
+    		<span>订单支付失败</span>
+    	</div>
+    	
+    	<div style="height: 20px"></div>
+		<div class="page-info page-info3">本页面不做为最终结果, 以实际到账金额为准</div>
+		<div style="clear: both;"></div>
+    	<div class="register-btn">
+			<a href="order-detail.html" class="btn-block btn-mybtn4">查看订单详情</a>
+    	</div>
+    	<div class="register-btn">
+			<a href="main.html" class="btn-block btn-mybtn-result">返回首页</a>
+    	</div>
+    </section>
+</section>
+
+
+
+</body>
+<script type="text/javascript" src="js/jquery-1.10.1.min.js" ></script>
+<script type="text/javascript" src="js/layer.js" ></script>
+ <script type="text/javascript" src="js/ydui.js" ></script>
+<script src="./js/ydui.flexible.js"></script>
+</html>

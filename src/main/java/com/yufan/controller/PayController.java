@@ -3,6 +3,7 @@ package com.yufan.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.yufan.dao.db2.IOrderDao;
+import com.yufan.pojo1.TbClient;
 import com.yufan.pojo1.TbTradeRecord;
 import com.yufan.service.IPayCenterService;
 import com.yufan.utils.*;
@@ -79,7 +80,7 @@ public class PayController {
      * paramDataBase64 = Base64(paramData);
      * 请求方式：get
      * 请求地址：
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/payEnter?base64Str=paramDataBase64
+     * http://lirf-shop.51vip.biz/pay-center/pay/payEnter?base64Str=paramDataBase64
      */
     @RequestMapping("payEnter")
     public void payEnter(HttpServletRequest request, HttpServletResponse response, String base64Str) {
@@ -119,6 +120,7 @@ public class PayController {
                     response.sendRedirect(request.getContextPath() + "/pay/page505");
                     return;
                 }
+                String clientId = clientJson.getString("clientId");
                 String secretKey = clientJson.getString("secretKey");
                 String quitUrl = clientJson.getString("quitUrl");//支付中途退出地址
                 String returnUrl = clientJson.getString("returnUrl");//支付结果通知地址
@@ -186,12 +188,13 @@ public class PayController {
                 tradeRecord.setPayWay(payWay.byteValue());
                 tradeRecord.setTradeAcount("");
                 tradeRecord.setSubmitTime(time);
-                tradeRecord.setReturnUrl(returnUrl + "?orderNo=" + orderNo);
+                tradeRecord.setReturnUrl(returnUrl);
+                tradeRecord.setClientId(Integer.parseInt(clientId));
                 //保存交易记录
                 iPayCenterService.saveObj(tradeRecord);
-                CacheConstant.payReusltMap.put(partnerTradeNo, Constants.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
+                CacheConstant.payResultMap.put(partnerTradeNo, Constants.TRADE_STATUS_0);//保存支付结果缓存//定时处理移除
                 String passTime = DatetimeUtil.convertDateToStr(DatetimeUtil.addDays(new Date(), CacheConstant.addPassDay));
-                CacheConstant.payReusltRemoveMap.put(partnerTradeNo, passTime);//用于记录移除缓存标识
+                CacheConstant.payResultRemoveMap.put(partnerTradeNo, passTime);//用于记录移除缓存标识
 
                 LOG.info("---payEnter------orderNo:" + orderNo);
                 LOG.info("--payEnter-------goodsName:" + goodsName);
@@ -259,7 +262,7 @@ public class PayController {
 
     /**
      * 支付宝
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/alipayReturnPage
+     * http://lirf-shop.51vip.biz/pay-center/pay/alipayReturnPage
      * alipay支付后同步通知页面地址(所有支付交由支付中心处理)
      *
      * @return
@@ -298,14 +301,13 @@ public class PayController {
             boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipayPublicKey, AlipayConfig.charset, "RSA2");
             LOG.info("-----alipayReturnPage:" + params);
             String returnUrl = "";
-            String orderNo = "";
             if (StringUtils.isNotEmpty(outTradeNo)) {
                 //根据交易流水号查询交易记录
                 TbTradeRecord tradeRecord = iPayCenterService.loadTradeRecordByPartnerTradeNo(outTradeNo);
-                returnUrl = tradeRecord == null ? "" : tradeRecord.getReturnUrl();
-                orderNo = tradeRecord.getOrderNo() == null ? "" : tradeRecord.getOrderNo();
+                //生成特定base64密文
+                returnUrl = tradeRecord == null ? "" : tradeRecord.getReturnUrl() + "?orderNo=" + tradeRecord.getOrderNo();
                 //更新交易记录
-                if (0 == CacheConstant.payReusltMap.get(outTradeNo)) {
+                if (0 == CacheConstant.payResultMap.get(outTradeNo)) {
                     LOG.info("----alipayReturnPage--同步响应更新--");
                     iPayCenterService.updateTradeRecord(outTradeNo, tradeNo, sellerId, "", Constants.TRADE_STATUS_0);
                 }
@@ -316,7 +318,6 @@ public class PayController {
                 LOG.info("--验证---verify_result---失败----");
             }
             modelAndView.addObject("returnUrl", returnUrl);
-            modelAndView.addObject("orderNo", orderNo);
             modelAndView.addObject("partnerTradeNo", outTradeNo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,7 +326,7 @@ public class PayController {
     }
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptAlipay
+     * http://lirf-shop.51vip.biz/pay-center/pay/interruptAlipay
      * 中途退出(alipay)页面
      *
      * @param request
@@ -363,7 +364,7 @@ public class PayController {
     }
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/interruptDefault
+     * http://lirf-shop.51vip.biz/pay-center/pay/interruptDefault
      * 中途退出缺省页面
      *
      * @param request
@@ -399,7 +400,7 @@ public class PayController {
     }
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/ajaxPayResult
+     * http://lirf-shop.51vip.biz/pay-center/pay/ajaxPayResult
      * 获取支付结果
      * result 状态 0 等待操作 1成功 2 失败  3异常
      * partnerTradeNo 商户订单号
@@ -412,7 +413,7 @@ public class PayController {
             writer = response.getWriter();
             int result = Constants.TRADE_STATUS_0;//状态 0 等待操作 1成功 2 失败  3异常
             if (StringUtils.isNotEmpty(partnerTradeNo)) {
-                result = CacheConstant.payReusltMap.get(partnerTradeNo) == null ? Constants.TRADE_STATUS_0 : CacheConstant.payReusltMap.get(partnerTradeNo);
+                result = CacheConstant.payResultMap.get(partnerTradeNo) == null ? Constants.TRADE_STATUS_0 : CacheConstant.payResultMap.get(partnerTradeNo);
             }
             writer.print(result);
             writer.close();
@@ -423,7 +424,7 @@ public class PayController {
 
     /**
      * 支付异常跳转页面
-     * http://lirf-shop.51vip.biz:25139/pay-center/pay/page505
+     * http://lirf-shop.51vip.biz/pay-center/pay/page505
      *
      * @param request
      * @param response

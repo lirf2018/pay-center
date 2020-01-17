@@ -1,0 +1,185 @@
+html{
+   touch-action:none;
+}
+body{
+	font-size: .25rem;
+	background-color: white;
+	font-family: ff-tisa-web-pro-1,ff-tisa-web-pro-2,"Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3";
+}
+	
+.m-navbar{
+	position: fixed;
+	width: 100%;
+	z-index: 100;
+}
+.header-height{
+	width: 100%;
+	height: 1.08rem;
+}
+
+.m-navbar,.navbar-center,.navbar-item{
+	height: 1.1rem;
+	background-color: #2894FF;
+}
+
+.navbar-item .back-ico:before, .navbar-item .next-ico:before{
+	color: #fff;
+	font-size: 0.45rem;
+}
+
+.navbar-right{
+	color: white;
+	font-size: .50rem;
+}
+
+
+.navbar-center .navbar-title{
+	color: #fff;
+	font-size: .38rem;
+	font-weight: bold;
+	
+}
+.m-navbar:after{
+	border-bottom: none;
+}
+
+.cont_warp_clear{
+	width: 100%;
+	margin-bottom: 60px;
+}
+
+.tabbar-fixed{
+	height: 60px;
+	padding-top: 8px;
+}
+.tabbar-fixed img{
+	width: 60px;
+	height: 35px;
+}
+.tabbar-txt{
+	/*padding-top: 1px;*/
+}
+
+
+.m-cell{
+	margin-bottom: 0;
+	padding-bottom: 15px;
+	border: 1px solid #7C7A7B;
+	margin:10px 8px 0px 10px ;
+	border-radius: 2% ;
+}
+
+.cell-input{
+	font-size: .25rem;
+}
+.cell-left{
+	font-size: .25rem;
+	border-bottom: 1px solid #7C7A7B;
+}
+.cell-right{
+	font-size: .25rem;
+	border-bottom: 1px solid #7C7A7B;
+	margin-right: 10px;
+}
+
+.foor-activate, .foor-activate i{
+	color: #2894FF;
+	
+}
+
+.tabbar-icon *:before, .tabbar-icon *:after{
+	/*font-size: 0.7rem !important;*/
+	font-size: 0.5rem !important;
+}
+
+.tabbar-txt{
+	font-size: 0.28rem;
+}
+
+.btn-mybtn-result{
+	color: gray;
+	font-size: .32rem;
+}
+
+.page-info{
+	color: red;
+	background-color: white;
+	padding: 5px;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.page-info3{
+	background-color: #EEEDF3;
+	padding-top: 20px;
+}
+
+
+.result1-page{
+	text-align: center;
+	padding: 15px;
+	color: #2894FF;
+	font-size: .35rem;
+	background-color: white;
+}
+
+.result1-info{
+	margin-top: 20px;
+	text-align: left;
+	color: #2894FF;
+	line-height: .73rem;
+	background-color: white;
+	padding: 15px 0;
+	font-size: .32rem;
+	color: gray;
+}
+.item{
+	float: left;
+	width: 44%;
+	text-align: right;
+	margin-right: 20px;
+}
+
+.item-msg{
+	text-align: left;
+}
+
+.item-msg li:nth-child(2){
+	color: #2894FF;
+	font-size: .42rem;
+}
+
+
+.result2-page-success{
+	text-align: center;
+	width: 100%;
+	font-size: 2.5rem;
+	color: #2894FF;
+	padding-top: 15px;
+}
+.result2-page-fail{
+	text-align: center;
+	width: 100%;
+	font-size: 2.5rem;
+	color: #2894FF;
+	padding-top: 15px;
+}
+
+.result2-page{
+	text-align: center;
+	width: 100%;
+	color: grey;
+	font-size: .35rem;
+}
+
+/** yudi  addr */
+.cityselect-title>span:first-child{
+	float: left;
+	width: 70%;
+	text-align: left;
+	margin-left: 10px;
+}
+.cityselect-title>span:last-child{
+	float: right;
+	padding-right: 10px;
+}

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * 创建人: lirf
- * 创建时间:  2020/1/11 18:52
+ * 创建时间:  2020/1/17 13:05
  * 功能介绍:
  */
 @Entity
@@ -28,6 +28,7 @@ public class TbTradeRecord {
     private Timestamp finishTime;
     private Timestamp submitTime;
     private String returnUrl;
+    private Integer clientId;
 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
@@ -180,6 +181,16 @@ public class TbTradeRecord {
         this.returnUrl = returnUrl;
     }
 
+    @Basic
+    @Column(name = "client_id", nullable = true)
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -199,11 +210,12 @@ public class TbTradeRecord {
                 Objects.equals(tradeAcount, that.tradeAcount) &&
                 Objects.equals(finishTime, that.finishTime) &&
                 Objects.equals(submitTime, that.submitTime) &&
-                Objects.equals(returnUrl, that.returnUrl);
+                Objects.equals(returnUrl, that.returnUrl) &&
+                Objects.equals(clientId, that.clientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderNo, tradeNo, partnerTradeNo, recordType, status, remark, createTime, updateTime, price, payWay, tradeAcount, finishTime, submitTime, returnUrl);
+        return Objects.hash(id, orderNo, tradeNo, partnerTradeNo, recordType, status, remark, createTime, updateTime, price, payWay, tradeAcount, finishTime, submitTime, returnUrl, clientId);
     }
 }

@@ -1,62 +1,95 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
-
 <head>
-    <title>交易结果页面</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>操作结果</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
     <base th:href="@{/}">
+    <link rel="stylesheet" href="css/ydui.css?rev=@@hash"/>
+    <link rel="stylesheet" href="css/demo.css"/>
+    <link rel="stylesheet" href="css/commondemo.css"/>
     <style>
-        body {
-            padding: 0px 0px;
-            margin: 0px 0px;
-        }
-
-        .header-panel {
-            padding: 12px 0;
-            background-color: #2894FF;
-            color: white;
-        }
-
         .payding {
-            width: 100%;
-            text-align: center;
+            font-size: .33rem;
+            padding-left: .75rem;
             position: relative;
-            padding-left: 20px;
-            top: 3.0rem;
+            top: 50px;
             color: grey;
-        }
-
-        .msg {
-            padding: 2.0rem;
-            color: grey;
-        }
-
-        .alert-msg {
-            font-size: 10px;
             text-align: center;
-            color: red;
-            padding: 1.5rem 0;
         }
     </style>
-    <script src="js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-<div align="center" class="header-panel">
-    <span>交易结果</span>
-</div>
-<div style="width: 100%;" id="payding">
-    <div align="center" class="payding">交易结果确认中<span style="letter-spacing:8px" id="point">...</span></div>
-    <div align="center"><img src="img/loading.gif" width="200px" height="200px"></div>
-</div>
-<div style="width: 100%;display: none" id="payResult">
+<section class="g-flexview">
+    <header class="m-navbar">
+        <a class="navbar-item"><i class="back-ico" onclick="javascript:history.go(-1)"></i></a>
+        <div class="navbar-center"><span class="navbar-title">交易结果页面</span></div>
+    </header>
+    <div class="header-height"></div>
+    <div style="width: 100%;" id="payding" align="center">
+        <div align="center" class="payding">交易结果确认中<span style="letter-spacing:8px" id="point">...</span></div>
+        <div align="center"><img src="img/loading.gif" width="200px" height="200px"></div>
+    </div>
+    <section class="g-scrollview">
+        <div id="success" style="display: none">
+            <!-- 成功 -->
+            <div class="result2-page-success">
+                <i class="icon-success-outline"></i>
+            </div>
+            <div class="result2-page">
+                <span>交易成功</span>
+            </div>
+        </div>
+
+        <div id="fail" style="display: none">
+            <!-- 失败 -->
+            <div class="result2-page-fail">
+                <i class="icon-error-outline"></i>
+            </div>
+            <div class="result2-page">
+                <span>交易失败</span>
+            </div>
+        </div>
+
+        <div id="outTime" style="display: none">
+            <!-- 失败 -->
+            <div class="result2-page-fail">
+                <i class="icon-error-outline"></i>
+            </div>
+            <div class="result2-page">
+                <span>交易结果查询超时</span>
+            </div>
+        </div>
+
+        <div style="height: 20px"></div>
+        <div id="commonDiv" style="display: none">
+            <div class="page-info page-info3">如对订单有疑问，请联系客服核实</div>
+            <div style="clear: both;"></div>
+            <div class="register-btn">
+                <a th:href="${returnUrl}" class="btn-block btn-mybtn4">查看订单详情</a>
+            </div>
+            <div class="register-btn">
+                <a href="http://lirf-shop.51vip.biz/store-web/index/mainPage" class="btn-block btn-mybtn-result">返回商城</a>
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="js/layer.js"></script>
+<script type="text/javascript" src="js/ydui.js"></script>
+<script src="js/ydui.flexible.js"></script>
+<!--<div style="width: 100%;display: none" id="payResult">
     <div align="center" class="msg"></div>
     <div align="center">
         <a th:href="${returnUrl}">查看订单详情</a>
     </div>
     <div align="center" class="alert-msg">如对订单有疑问，请联系客服核实</div>
-</div>
+</div>-->
 <script th:inline="javascript">
     /*var t = 0;
     var inter = setInterval("payding()", 1000);
@@ -74,17 +107,18 @@
     var partnerTradeNo = [[${partnerTradeNo}]];//商户订单号/支付流水号
 
     //查询最终交易结果
-    var t = 9;
+    var t = 10;
     var inter = setInterval("queryPayResult()", 2000);
 
     function queryPayResult() {
         if (t < 0) {
-            $(".msg").html("交易结果确认超时");
-            setCommon();
+            var obj = $("#outTime");
+            setCommon(obj);
             return;
         }
         t--;
         $.ajax({
+            // url: "test/ajaxPayResultTest",
             url: "pay/ajaxPayResult",
             type: 'POST',
             data: {
@@ -97,22 +131,22 @@
                 console.log("---:" + data);
                 //状态 0 等待操作 1成功 2 失败  3异常
                 if (data == 1) {
-                    $(".msg").html("交易成功");
-                    setCommon();
+                    var obj = $("#success");
+                    setCommon(obj);
                 } else if (data == 2) {
-                    $(".msg").html("交易失败");
-                    setCommon();
+                    var obj = $("#fail");
+                    setCommon(obj);
                 }
             }
         });
     }
 
-    function setCommon() {
+    function setCommon(obj) {
         clearInterval(inter);
         $("#payding").hide();
-        $("#payResult").show();
+        obj.show();
+        $("#commonDiv").show();
     }
 
 </script>
-</body>
 </html>

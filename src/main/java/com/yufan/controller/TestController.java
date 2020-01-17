@@ -27,10 +27,10 @@ public class TestController {
 
     //-------------------------------------------测试--------------------------------------------------------------------
 
-    public static int testResultValue = 2;//0失败  1成功 2异常或者超时
+    public static int testResultValue = 0;//状态 0 等待操作 1成功 2 失败  3异常
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/test/setTestResult?value=1
+     * http://lirf-shop.51vip.biz:/pay-center/test/setTestResult?value=1
      * (测试)
      */
     @RequestMapping("setTestResult")
@@ -48,18 +48,19 @@ public class TestController {
 
     /**
      * (测试)
-     * http://lirf-shop.51vip.biz:25139/pay-center/test/getTestResult
+     * http://lirf-shop.51vip.biz:/pay-center/test/getTestResult
      *
      * @param request
      * @param response
      */
-    @RequestMapping("getTestResult")
+    @RequestMapping("ajaxPayResultTest")
     public void getTestResult(HttpServletRequest request, HttpServletResponse response) {
         PrintWriter writer;
         try {
             writer = response.getWriter();
-            writer.print(1);
+            writer.print(testResultValue);
             writer.close();
+            LOG.info("--ajaxPayResultTest-" + testResultValue);
         } catch (Exception e) {
             LOG.info("----->getTestResult异常");
         }
@@ -68,7 +69,7 @@ public class TestController {
 
     /**
      * (测试)
-     * http://lirf-shop.51vip.biz:25139/pay-center/test/testResult
+     * http://lirf-shop.51vip.biz:/pay-center/test/testResult
      *
      * @param request
      * @param response
@@ -88,7 +89,7 @@ public class TestController {
 
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/test/recharge
+     * http://lirf-shop.51vip.biz:/pay-center/test/recharge
      * 测试充值页面(测试)
      *
      * @return
@@ -102,7 +103,7 @@ public class TestController {
     }
 
     /**
-     * http://lirf-shop.51vip.biz:25139/pay-center/test/payParam
+     * http://lirf-shop.51vip.biz:/pay-center/test/payParam
      * 生成支付必须参数(测试)
      */
     @RequestMapping("payParam")
@@ -135,6 +136,38 @@ public class TestController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * http://lirf-shop.51vip.biz:/pay-center/test/reuslt3
+     * 测试充值页面(测试)
+     *
+     * @return
+     */
+    @RequestMapping("reuslt3")
+    public ModelAndView reuslt3(HttpServletResponse response, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("code", 0);
+
+        modelAndView.setViewName("result-page3");
+        return modelAndView;
+    }
+
+    /**
+     * http://lirf-shop.51vip.biz:/pay-center/test/interrupt
+     * 测试充值页面(测试)
+     *
+     * @return
+     */
+    @RequestMapping("interrupt")
+    public ModelAndView interrupt(HttpServletResponse response, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+
+
+        modelAndView.setViewName("interruptDefault");
+        return modelAndView;
     }
 
     //-------------------------------------------测试--------------------------------------------------------------------

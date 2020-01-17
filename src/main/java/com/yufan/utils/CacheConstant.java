@@ -28,14 +28,13 @@ public class CacheConstant {
     /**
      * 清除支付结果数据 key = partnerTradeNo商户订单号(支付流水号) value = 过期时间（当处理完毕时需要移除出缓存）
      */
-    public static Map<String, String> payReusltRemoveMap = new HashMap<>();
-    public static Integer addPassSeconds = 50;//增加过期时间/s
+    public static Map<String, String> payResultRemoveMap = new HashMap<>();
     public static Integer addPassDay = 3;//增加过期时间/d
 
     /**
      * 保存支付最终结果 key = partnerTradeNo商户订单号(支付流水号) value = status
      */
-    public static Map<String, Integer> payReusltMap = new HashMap<>();
+    public static Map<String, Integer> payResultMap = new HashMap<>();
 
     /**
      * 保存交易记录（当处理完毕时需要移除出缓存）

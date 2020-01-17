@@ -171,7 +171,7 @@ public class PayResultNotice {
                     LOG.info("-doTradeRecord--alipay--更新交易最终结果2-----");
                     iPayCenterService.finishTradeRecordStatus(partnerTradeNo, tradeNo, sellerId, Constants.TRADE_STATUS_1);//交易成功
                 }
-                CacheConstant.payReusltMap.put(partnerTradeNo, Constants.TRADE_STATUS_1);
+                CacheConstant.payResultMap.put(partnerTradeNo, Constants.TRADE_STATUS_1);
                 StoreInfoUtil.getInstance().payResultNotice(tradeNo, payTime, orderNo, payWay);
             }
         } catch (Exception e) {
